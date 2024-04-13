@@ -1,1 +1,3 @@
-export class CreateMovieGenreDto {}
+export class CreateMovieGenreDto {
+  name: string;
+}

@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
+import { MovieGenre } from './entities/movie-genre.entity';
+import { MovieGenreRepository } from './entities/movie-genre.repository.interface';
 
 @Injectable()
 export class MovieGenreService {
-  create(createMovieGenreDto: CreateMovieGenreDto) {
-    return 'This action adds a new movieGenre';
+  constructor(private readonly repository: MovieGenreRepository) {}
+
+  async create(createMovieGenreDto: CreateMovieGenreDto): Promise<MovieGenre> {
+    const movieGenre = MovieGenre.create({ name: createMovieGenreDto.name });
+
+    const movieGenreCreated = await this.repository.create(movieGenre);
+
+    return movieGenreCreated;
   }
 
   findAll() {
