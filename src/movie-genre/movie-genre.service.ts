@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
@@ -8,7 +8,10 @@ import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 
 @Injectable()
 export class MovieGenreService {
-  constructor(private readonly repository: IMovieGenreRepository) {}
+  constructor(
+    @Inject('MovieGenreRepository')
+    private readonly repository: IMovieGenreRepository,
+  ) {}
 
   async create(createMovieGenreDto: CreateMovieGenreDto): Promise<MovieGenre> {
     const movieGenre = MovieGenre.create({ name: createMovieGenreDto.name });
