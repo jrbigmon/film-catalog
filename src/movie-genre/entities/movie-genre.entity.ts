@@ -28,6 +28,12 @@ export class MovieGenre {
     return newMovieGenre;
   }
 
+  public update({ name }: IMovieGenre): void {
+    if (name) {
+      this.name = name;
+    }
+  }
+
   public getId(): string {
     return this.id;
   }

@@ -16,19 +16,32 @@ export class MovieGenreService {
     return movieGenreCreated;
   }
 
+  async update(id: string, updateMovieGenreDto: UpdateMovieGenreDto) {
+    const movieGenreInDatabase = await this.repository.findById(id);
+
+    if (!movieGenreInDatabase) {
+      throw new Error(`Movie Genre not found`);
+    }
+
+    movieGenreInDatabase.update({ name: updateMovieGenreDto?.name });
+
+    const movieGenreUpdated = await this.repository.update(
+      id,
+      movieGenreInDatabase,
+    );
+
+    return movieGenreUpdated;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} movieGenre`;
+  }
+
   findAll() {
     return `This action returns all movieGenre`;
   }
 
   findOne(id: number) {
     return `This action returns a #${id} movieGenre`;
-  }
-
-  update(id: number, updateMovieGenreDto: UpdateMovieGenreDto) {
-    return `This action updates a #${id} movieGenre`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} movieGenre`;
   }
 }
