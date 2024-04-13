@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
 import { IMovieGenreRepository } from './entities/movie-genre.repository.interface';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
+import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 
 @Injectable()
 export class MovieGenreService {
@@ -24,7 +25,11 @@ export class MovieGenreService {
     const movieGenreInDatabase = await this.repository.findById(id);
 
     if (!movieGenreInDatabase) {
-      throw new Error(`Movie Genre not found`);
+      throw new ExceptionsServices(
+        `Movie Genre not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
     }
 
     movieGenreInDatabase.update({ name: updateMovieGenreDto?.name });
@@ -41,7 +46,11 @@ export class MovieGenreService {
     const movieGenreInDatabase = await this.repository.findById(id);
 
     if (!movieGenreInDatabase) {
-      throw new Error(`Movie Genre not found`);
+      throw new ExceptionsServices(
+        `Movie Genre not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
     }
 
     movieGenreInDatabase.delete();
@@ -57,7 +66,11 @@ export class MovieGenreService {
     const movieGenre = await this.repository.findById(id);
 
     if (!movieGenre) {
-      throw new Error(`Movie Genre not found`);
+      throw new ExceptionsServices(
+        `Movie Genre not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
     }
 
     return movieGenre;
