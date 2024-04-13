@@ -19,52 +19,52 @@ export class MovieGenreController {
   constructor(private readonly movieGenreService: MovieGenreService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createMovieGenreDto: CreateMovieGenreDto,
     @Res() res: Response,
   ) {
     try {
-      return this.movieGenreService.create(createMovieGenreDto);
+      return await this.movieGenreService.create(createMovieGenreDto);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
   }
 
   @Get()
-  findAll(@Res() res: Response) {
+  async findAll(@Res() res: Response) {
     try {
-      return this.movieGenreService.findAll();
+      return await this.movieGenreService.findAll();
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Res() res: Response) {
+  async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
-      return this.movieGenreService.findOne(id);
+      return await this.movieGenreService.findOne(id);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateMovieGenreDto: UpdateMovieGenreDto,
     @Res() res: Response,
   ) {
     try {
-      return this.movieGenreService.update(id, updateMovieGenreDto);
+      return await this.movieGenreService.update(id, updateMovieGenreDto);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Res() res: Response) {
+  async remove(@Param('id') id: string, @Res() res: Response) {
     try {
-      return this.movieGenreService.remove(id);
+      return await this.movieGenreService.remove(id);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
