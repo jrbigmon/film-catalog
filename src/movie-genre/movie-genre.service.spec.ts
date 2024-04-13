@@ -57,4 +57,29 @@ describe('MovieGenreService', () => {
       }
     });
   });
+
+  describe('Remove', () => {
+    beforeEach(async () => {
+      repository = new MovieGenreRepositoryInMemory([
+        new MovieGenre('Action', '123', new Date(), new Date(), null),
+      ]);
+      service = new MovieGenreService(repository);
+    });
+
+    it('should be delete a movie genre and return void', async () => {
+      const result = await service.remove('123');
+      const searchValueInDb = await repository.findById('123');
+
+      expect(searchValueInDb).toBeUndefined();
+      expect(result).toBeUndefined();
+    });
+
+    it('should be not delete a movie genre when the id does not exist', async () => {
+      try {
+        await service.remove('321');
+      } catch (error) {
+        expect(error.message).toBe('Movie Genre not found');
+      }
+    });
+  });
 });

@@ -34,6 +34,10 @@ export class MovieGenre {
     }
   }
 
+  public delete(): void {
+    //implements send event when movie is deleted
+  }
+
   public getId(): string {
     return this.id;
   }
@@ -64,6 +68,10 @@ export class MovieGenre {
 
   public setUpdatedAt(updatedAt: Date): void {
     this.updatedAt = updatedAt;
+  }
+
+  public setDeletedAt(deletedAt: Date): void {
+    this.deletedAt = deletedAt;
   }
 
   public toJSON(): IMovieGenre {

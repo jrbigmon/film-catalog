@@ -16,7 +16,10 @@ export class MovieGenreService {
     return movieGenreCreated;
   }
 
-  async update(id: string, updateMovieGenreDto: UpdateMovieGenreDto) {
+  async update(
+    id: string,
+    updateMovieGenreDto: UpdateMovieGenreDto,
+  ): Promise<boolean> {
     const movieGenreInDatabase = await this.repository.findById(id);
 
     if (!movieGenreInDatabase) {
@@ -33,8 +36,16 @@ export class MovieGenreService {
     return movieGenreUpdated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movieGenre`;
+  async remove(id: string): Promise<void> {
+    const movieGenreInDatabase = await this.repository.findById(id);
+
+    if (!movieGenreInDatabase) {
+      throw new Error(`Movie Genre not found`);
+    }
+
+    movieGenreInDatabase.delete();
+
+    await this.repository.delete(id);
   }
 
   findAll() {

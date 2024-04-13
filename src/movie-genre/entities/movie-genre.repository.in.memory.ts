@@ -12,7 +12,9 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
   }
 
   async findById(id: string): Promise<MovieGenre> {
-    return this.fakeDatabase.find((movieGenre) => movieGenre.getId() === id);
+    return this.fakeDatabase.find(
+      (movieGenre) => movieGenre.getId() === id && !movieGenre.getDeletedAt(),
+    );
   }
 
   findAll(filters?: IFindAllFilters<MovieGenre>): Promise<MovieGenre[]> {
@@ -35,12 +37,20 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
 
     if (movieGenreInDBIndex === -1) return false;
 
+    movieGenre.setUpdatedAt(new Date());
+
     this.fakeDatabase[movieGenreInDBIndex] = movieGenre;
 
     return true;
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    const movieGenreInDB = this.fakeDatabase.find(
+      (movieGenre) => movieGenre.getId() === id,
+    );
+
+    if (movieGenreInDB) {
+      movieGenreInDB.setDeletedAt(new Date());
+    }
   }
 }
