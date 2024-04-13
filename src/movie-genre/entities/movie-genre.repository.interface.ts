@@ -1,7 +1,7 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from './movie-genre.entity';
 
-export interface MovieGenreRepository {
+export interface IMovieGenreRepository {
   findById(id: string): Promise<MovieGenre>;
   findAll(filters?: IFindAllFilters<MovieGenre>): Promise<MovieGenre[]>;
   create(movieGenre: MovieGenre): Promise<MovieGenre>;

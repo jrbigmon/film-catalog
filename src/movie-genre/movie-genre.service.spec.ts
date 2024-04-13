@@ -1,11 +1,11 @@
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { MovieGenreRepositoryInMemory } from './entities/movie-genre.repository.in.memory';
-import { MovieGenreRepository } from './entities/movie-genre.repository.interface';
+import { IMovieGenreRepository } from './entities/movie-genre.repository.interface';
 import { MovieGenreService } from './movie-genre.service';
 
 describe('MovieGenreService', () => {
   let service: MovieGenreService;
-  let repository: MovieGenreRepository;
+  let repository: IMovieGenreRepository;
 
   beforeEach(async () => {
     repository = new MovieGenreRepositoryInMemory();

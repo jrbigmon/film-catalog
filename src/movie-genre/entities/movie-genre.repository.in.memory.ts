@@ -1,8 +1,8 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from './movie-genre.entity';
-import { MovieGenreRepository } from './movie-genre.repository.interface';
+import { IMovieGenreRepository } from './movie-genre.repository.interface';
 
-export class MovieGenreRepositoryInMemory implements MovieGenreRepository {
+export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
   fakeDatabase = new Array<MovieGenre>();
 
   findById(id: string): Promise<MovieGenre> {
