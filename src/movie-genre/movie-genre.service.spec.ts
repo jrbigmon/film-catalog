@@ -82,4 +82,42 @@ describe('MovieGenreService', () => {
       }
     });
   });
+
+  describe('FindAll', () => {
+    beforeEach(async () => {
+      repository = new MovieGenreRepositoryInMemory([
+        new MovieGenre('Action', '123', new Date(), new Date(), null),
+      ]);
+      service = new MovieGenreService(repository);
+    });
+
+    it('should be return a list of movie genre', async () => {
+      const movieGenres = await service.findAll();
+
+      expect(movieGenres).toHaveLength(1);
+    });
+  });
+
+  describe('FindOne', () => {
+    beforeEach(async () => {
+      repository = new MovieGenreRepositoryInMemory([
+        new MovieGenre('Action', '123', new Date(), new Date(), null),
+      ]);
+      service = new MovieGenreService(repository);
+    });
+
+    it('should be return a movie genre', async () => {
+      const movieGenre = await service.findOne('123');
+
+      expect(movieGenre).toBeDefined();
+    });
+
+    it('should be not return a movie genre when id does not exist', async () => {
+      try {
+        await service.findOne('321');
+      } catch (error) {
+        expect(error.message).toBe('Movie Genre not found');
+      }
+    });
+  });
 });

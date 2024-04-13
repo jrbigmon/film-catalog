@@ -3,6 +3,7 @@ import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
 import { IMovieGenreRepository } from './entities/movie-genre.repository.interface';
+import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
 
 @Injectable()
 export class MovieGenreService {
@@ -48,11 +49,17 @@ export class MovieGenreService {
     await this.repository.delete(id);
   }
 
-  findAll() {
-    return `This action returns all movieGenre`;
+  async findAll(findAllFilters?: IFindAllFilters<MovieGenre>) {
+    return await this.repository.findAll(findAllFilters);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movieGenre`;
+  async findOne(id: string) {
+    const movieGenre = await this.repository.findById(id);
+
+    if (!movieGenre) {
+      throw new Error(`Movie Genre not found`);
+    }
+
+    return movieGenre;
   }
 }

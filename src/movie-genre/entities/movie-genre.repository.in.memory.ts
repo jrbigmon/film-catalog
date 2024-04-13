@@ -17,8 +17,8 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
     );
   }
 
-  findAll(filters?: IFindAllFilters<MovieGenre>): Promise<MovieGenre[]> {
-    throw new Error('Method not implemented.');
+  async findAll(filters?: IFindAllFilters<MovieGenre>): Promise<MovieGenre[]> {
+    return this.fakeDatabase;
   }
 
   async create(movieGenre: MovieGenre): Promise<MovieGenre> {
