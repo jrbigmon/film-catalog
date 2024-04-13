@@ -52,6 +52,14 @@ export class MovieGenre {
     this.name = name;
   }
 
+  public setCreatedAt(createdAt: Date): void {
+    this.createdAt = createdAt;
+  }
+
+  public setUpdatedAt(updatedAt: Date): void {
+    this.updatedAt = updatedAt;
+  }
+
   public toJSON(): IMovieGenre {
     return {
       id: this.getId(),
