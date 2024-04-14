@@ -18,7 +18,23 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
   }
 
   async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
-    return this.fakeDatabase.filter((movie) => !movie.getDeletedAt());
+    const genreMovies = this.fakeDatabase.filter(
+      (movieGenre) => !movieGenre.getDeletedAt(),
+    );
+
+    if (!filters?.filters) return genreMovies;
+
+    const filtersKey = Object.keys(filters?.filters)?.[0];
+    const filtersValues = Object.values(filters?.filters)?.[0];
+
+    const listFilters = [];
+
+    genreMovies.forEach((movieGenre) => {
+      if (filtersValues.includes(movieGenre.toJSON()[filtersKey]))
+        listFilters.push(movieGenre);
+    });
+
+    return listFilters;
   }
 
   async create(movieGenre: MovieGenre): Promise<MovieGenre> {
