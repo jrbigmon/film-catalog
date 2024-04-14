@@ -10,12 +10,14 @@ export class ExceptionsControllers {
       return res.status(error.statusCode).json({
         message: error.message,
         field: error.fieldError,
+        statusCode: error.statusCode,
       });
     }
 
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       message: 'Internal Server Error',
       field: 'UNKNOWN',
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
     });
   }
 }
