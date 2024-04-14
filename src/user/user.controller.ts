@@ -32,13 +32,13 @@ export class UserController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Res() res: Response,
   ) {
     try {
-      const result = this.userService.update(id, updateUserDto);
+      const result = await this.userService.update(id, updateUserDto);
       return res.json(result);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
@@ -47,9 +47,9 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string, @Res() res: Response) {
+  async remove(@Param('id') id: string, @Res() res: Response) {
     try {
-      const result = this.userService.remove(id);
+      const result = await this.userService.remove(id);
       return res.json(result);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
