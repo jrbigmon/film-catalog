@@ -37,6 +37,13 @@ export class User {
     return newUser;
   }
 
+  public update({ name, username, email, password }: Partial<IUser>) {
+    name && this.setName(name);
+    username && this.setUsername(username);
+    email && this.setEmail(email);
+    password && this.setPassword(password);
+  }
+
   public getId(): string {
     return this.id;
   }
