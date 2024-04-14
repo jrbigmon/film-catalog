@@ -1,6 +1,5 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../entities/movie-genre.entity';
-import { IMovieGenre } from '../entities/movie-genre.interface';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
 
 export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
@@ -18,7 +17,7 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
     );
   }
 
-  async findAll(filters?: IFindAllFilters<IMovieGenre>): Promise<MovieGenre[]> {
+  async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
     return this.fakeDatabase.filter((movie) => !movie.getDeletedAt());
   }
 

@@ -37,7 +37,7 @@ export class MovieRepositoryInMemory implements IMovieRepository {
     );
   }
 
-  async findAll(filters?: IFindAllFilters<Movie>): Promise<Movie[]> {
+  async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
     return this.fakeDatabase.filter((movie) => !movie.getDeletedAt());
   }
 

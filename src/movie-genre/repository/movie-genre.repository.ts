@@ -1,13 +1,12 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../entities/movie-genre.entity';
-import { IMovieGenre } from '../entities/movie-genre.interface';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
 
 export class MovieGenreRepository implements IMovieGenreRepository {
   findById(id: string): Promise<MovieGenre> {
     throw new Error('Method not implemented.');
   }
-  findAll(filters?: IFindAllFilters<IMovieGenre>): Promise<MovieGenre[]> {
+  findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
     throw new Error('Method not implemented.');
   }
   create(movieGenre: MovieGenre): Promise<MovieGenre> {

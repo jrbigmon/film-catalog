@@ -6,7 +6,6 @@ import { IMovieGenreRepository } from './repository/movie-genre.repository.inter
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
 import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 import { IMovieGenreService } from './movie-genre.service.interface';
-import { IMovieGenre } from './entities/movie-genre.interface';
 
 @Injectable()
 export class MovieGenreService implements IMovieGenreService {
@@ -63,7 +62,7 @@ export class MovieGenreService implements IMovieGenreService {
     await this.repository.delete(id);
   }
 
-  async findAll(findAllFilters?: IFindAllFilters<IMovieGenre>) {
+  async findAll(findAllFilters?: IFindAllFilters) {
     return await this.repository.findAll(findAllFilters);
   }
 

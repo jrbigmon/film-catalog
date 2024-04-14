@@ -2,7 +2,6 @@ import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface'
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
-import { IMovieGenre } from './entities/movie-genre.interface';
 
 export interface IMovieGenreService {
   create(createMovieGenreDto: CreateMovieGenreDto): Promise<MovieGenre>;
@@ -11,6 +10,6 @@ export interface IMovieGenreService {
     updateMovieGenreDto: UpdateMovieGenreDto,
   ): Promise<boolean>;
   remove(id: string): Promise<void>;
-  findAll(findAllFilters?: IFindAllFilters<IMovieGenre>): Promise<MovieGenre[]>;
+  findAll(findAllFilters?: IFindAllFilters): Promise<MovieGenre[]>;
   findOne(id: string): Promise<MovieGenre>;
 }
