@@ -22,7 +22,8 @@ describe('MovieGenreService', () => {
 
       const newMovieGenre = await service.create(payload);
 
-      expect(newMovieGenre).toBeDefined();
+      expect(newMovieGenre).not.toBeNull();
+      expect(newMovieGenre.getId()).not.toBeNull();
     });
   });
 
@@ -109,7 +110,7 @@ describe('MovieGenreService', () => {
     it('should be return a movie genre', async () => {
       const movieGenre = await service.findOne('123');
 
-      expect(movieGenre).toBeDefined();
+      expect(movieGenre).not.toBeNull();
     });
 
     it('should be not return a movie genre when id does not exist', async () => {
