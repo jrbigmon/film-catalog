@@ -18,7 +18,7 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
   }
 
   async findAll(filters?: IFindAllFilters<MovieGenre>): Promise<MovieGenre[]> {
-    return this.fakeDatabase;
+    return this.fakeDatabase.filter((movie) => !movie.getDeletedAt());
   }
 
   async create(movieGenre: MovieGenre): Promise<MovieGenre> {
