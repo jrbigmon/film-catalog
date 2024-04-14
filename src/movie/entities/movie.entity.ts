@@ -109,6 +109,10 @@ export class Movie {
     synopsis && this.setSynopsis(synopsis);
   }
 
+  public delete(): void {
+    //implements send event when movie is deleted
+  }
+
   public getId(): string {
     return this.id;
   }

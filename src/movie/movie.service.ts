@@ -89,14 +89,26 @@ export class MovieService {
       );
     }
 
-    return await this.repository.delete(id);
-  }
+    movieInDB.delete();
 
-  async findOne(id: string) {
-    return await this.repository.findById(id);
+    return await this.repository.delete(id);
   }
 
   async findAll(filters?: IFindAllFilters) {
     return await this.repository.findAll(filters);
+  }
+
+  async findOne(id: string) {
+    const movie = await this.repository.findById(id);
+
+    if (!movie) {
+      throw new ExceptionsServices(
+        `Movie not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
+    }
+
+    return movie;
   }
 }
