@@ -83,6 +83,32 @@ export class Movie {
     return newMovie;
   }
 
+  public update({
+    title,
+    cast,
+    country,
+    director,
+    durationMinutes,
+    genres,
+    language,
+    posterURL,
+    rating,
+    releaseYear,
+    synopsis,
+  }: Partial<IMovie>): void {
+    title && this.setTitle(title);
+    cast && this.setCast(cast);
+    country && this.setCountry(country);
+    director && this.setDirector(director);
+    durationMinutes && this.setDurationMinutes(durationMinutes);
+    genres && this.setGenres(genres);
+    language && this.setLanguage(language);
+    posterURL && this.setPosterURL(posterURL);
+    rating && this.setRating(rating);
+    releaseYear && this.setReleaseYear(releaseYear);
+    synopsis && this.setSynopsis(synopsis);
+  }
+
   public getId(): string {
     return this.id;
   }
