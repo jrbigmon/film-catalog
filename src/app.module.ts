@@ -17,7 +17,7 @@ import { DataSource } from 'typeorm';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.BD_HOST || 'localhost',
-      port: Number(process.env.BD_PORT) || 3306,
+      port: Number(process.env.BD_PORT) || 5432,
       username: process.env.BD_USER || 'root',
       password: process.env.DB_PASS || 'root',
       database: process.env.DB_NAME || 'test',
