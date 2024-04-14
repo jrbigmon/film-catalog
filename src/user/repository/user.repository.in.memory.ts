@@ -1,4 +1,5 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
+import { IFindByFilter } from '../../utils/interfaces/find-by-filters.interface';
 import { User } from '../entities/user.entity';
 import { IUserRepository } from './user.repository.interface';
 
@@ -9,6 +10,23 @@ export class UserRepositoryInMemory implements IUserRepository {
     if (listOfUsers) {
       this.fakeDatabase = listOfUsers;
     }
+  }
+
+  async findByFilter(filter: IFindByFilter): Promise<User> {
+    if (!filter) {
+      return null;
+    }
+
+    const filterValue = Object.values(filter)?.[0];
+    const key = Object.keys(filter)?.[0];
+
+    const user = this.fakeDatabase
+      .map((user) => user.toJSON())
+      ?.find((user) => user[key] === filterValue);
+
+    if (!user) return null;
+
+    return this.fakeDatabase.find((userInDB) => userInDB.getId() === user.id);
   }
 
   async findById(id: string): Promise<User> {
