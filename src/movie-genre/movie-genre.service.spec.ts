@@ -1,8 +1,8 @@
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
-import { MovieGenreRepositoryInMemory } from './entities/movie-genre.repository.in.memory';
-import { IMovieGenreRepository } from './entities/movie-genre.repository.interface';
+import { MovieGenreRepositoryInMemory } from './repository/movie-genre.repository.in.memory';
+import { IMovieGenreRepository } from './repository/movie-genre.repository.interface';
 import { MovieGenreService } from './movie-genre.service';
 
 describe('MovieGenreService', () => {

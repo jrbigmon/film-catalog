@@ -1,6 +1,6 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { IFindByFilter } from '../../utils/interfaces/find-by-filters.interface';
-import { Movie } from './movie.entity';
+import { Movie } from '../entities/movie.entity';
 import { IMovieRepository } from './movie.repository.interface';
 
 export class MovieRepositoryInMemory implements IMovieRepository {

@@ -1,5 +1,5 @@
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
-import { MovieGenre } from './movie-genre.entity';
+import { MovieGenre } from '../entities/movie-genre.entity';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
 
 export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {

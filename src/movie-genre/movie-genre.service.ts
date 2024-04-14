@@ -2,12 +2,14 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { MovieGenre } from './entities/movie-genre.entity';
-import { IMovieGenreRepository } from './entities/movie-genre.repository.interface';
+import { IMovieGenreRepository } from './repository/movie-genre.repository.interface';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
 import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
+import { IMovieGenreService } from './movie-genre.service.interface';
+import { IMovieGenre } from './entities/movie-genre.interface';
 
 @Injectable()
-export class MovieGenreService {
+export class MovieGenreService implements IMovieGenreService {
   constructor(
     @Inject('MovieGenreRepository')
     private readonly repository: IMovieGenreRepository,
@@ -61,7 +63,7 @@ export class MovieGenreService {
     await this.repository.delete(id);
   }
 
-  async findAll(findAllFilters?: IFindAllFilters<MovieGenre>) {
+  async findAll(findAllFilters?: IFindAllFilters<IMovieGenre>) {
     return await this.repository.findAll(findAllFilters);
   }
 
