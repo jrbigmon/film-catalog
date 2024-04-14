@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { UserRepositoryInMemory } from './repository/user.repository.in.memory';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepositoryTypeOrm } from './repository/user.repository.type.orm';
+import { UserRepository } from './repository/user.repository';
 
 const models = TypeOrmModule.forFeature([UserRepositoryTypeOrm]);
 
@@ -12,9 +12,10 @@ const models = TypeOrmModule.forFeature([UserRepositoryTypeOrm]);
   controllers: [UserController],
   providers: [
     UserService,
+    UserRepository,
     {
       provide: 'UserRepository',
-      useValue: new UserRepositoryInMemory(),
+      useExisting: UserRepository,
     },
   ],
   exports: [UserService],
