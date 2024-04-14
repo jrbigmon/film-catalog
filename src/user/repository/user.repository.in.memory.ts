@@ -12,6 +12,44 @@ export class UserRepositoryInMemory implements IUserRepository {
     }
   }
 
+  async findByFilterAndDiffValue(
+    filter?: IFindByFilter,
+    diffValue?: IFindByFilter,
+  ): Promise<User> {
+    const filterValues = filter && Object.values(filter);
+    const filterKeys = filter && Object.keys(filter);
+    const diffValueValues = diffValue && Object.values(diffValue);
+    const diffValueKeys = diffValue && Object.keys(diffValue);
+
+    const userInDBIndex = this.fakeDatabase
+      .map((user) => user.toJSON())
+      .findIndex((user) => {
+        let result = false;
+
+        if (filterKeys?.length && filterValues?.length) {
+          for (const key of filterKeys) {
+            if (filterValues.includes(user[key])) {
+              result = true;
+            }
+          }
+        }
+
+        if (diffValueKeys?.length && diffValueValues?.length) {
+          for (const key of diffValueKeys) {
+            if (diffValueValues.includes(user[key])) {
+              result = false;
+            }
+          }
+        }
+
+        return result;
+      });
+
+    if (userInDBIndex === -1) return null;
+
+    return this.fakeDatabase[userInDBIndex];
+  }
+
   async findByFilter(filter: IFindByFilter): Promise<User> {
     if (!filter) {
       return null;
@@ -20,13 +58,13 @@ export class UserRepositoryInMemory implements IUserRepository {
     const filterValue = Object.values(filter)?.[0];
     const key = Object.keys(filter)?.[0];
 
-    const user = this.fakeDatabase
+    const userInDBIndex = this.fakeDatabase
       .map((user) => user.toJSON())
-      ?.find((user) => user[key] === filterValue);
+      ?.findIndex((user) => user[key] === filterValue);
 
-    if (!user) return null;
+    if (userInDBIndex === -1) return null;
 
-    return this.fakeDatabase.find((userInDB) => userInDB.getId() === user.id);
+    return this.fakeDatabase[userInDBIndex];
   }
 
   async findById(id: string): Promise<User> {

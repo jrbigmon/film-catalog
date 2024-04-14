@@ -9,4 +9,8 @@ export interface IUserRepository {
   create(user: User): Promise<User>;
   update(id: string, user: User): Promise<boolean>;
   delete(id: string): Promise<void>;
+  findByFilterAndDiffValue(
+    filter?: IFindByFilter,
+    diffValue?: IFindByFilter,
+  ): Promise<User>;
 }

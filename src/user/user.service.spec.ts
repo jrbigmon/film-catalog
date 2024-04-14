@@ -1,4 +1,5 @@
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserRepositoryInMemory } from './repository/user.repository.in.memory';
 import { IUserRepository } from './repository/user.repository.interface';
@@ -72,6 +73,80 @@ describe('UserService', () => {
         expect(error.message).toBe('Email already exists');
       } finally {
         expect(result).toBeUndefined();
+      }
+    });
+  });
+
+  describe('Update', () => {
+    beforeEach(() => {
+      repository = new UserRepositoryInMemory([
+        new User(
+          'Vagner',
+          'vagner@mail.com',
+          'vagnerJr',
+          '123',
+          '10',
+          new Date(),
+          new Date(),
+        ),
+        new User(
+          'John Doe',
+          'john.doe@mail.com',
+          'JohnDoe',
+          'any_password',
+          '11',
+          new Date(),
+          new Date(),
+        ),
+      ]);
+      service = new UserService(repository);
+    });
+
+    it('should be update a user', async () => {
+      const payload: UpdateUserDto = {
+        name: 'John Smith',
+        username: 'JohnSmith',
+        email: 'john@mail.com',
+        password: '321',
+      };
+
+      const userUpdated = await service.update('10', payload);
+      const userInDB = await service.findOne('10');
+
+      expect(userUpdated).toBeTruthy();
+      expect(userInDB.getName()).toBe(payload.name);
+      expect(userInDB.getUsername()).toBe(payload.username);
+      expect(userInDB.getEmail()).toBe(payload.email);
+      expect(userInDB.getPassword()).not.toBe(payload.password);
+    });
+
+    it('should be not update user when username already exist', async () => {
+      const payload: UpdateUserDto = {
+        username: 'vagnerJr',
+      };
+
+      let userUpdated: boolean = null;
+      try {
+        userUpdated = await service.update('11', payload);
+      } catch (error) {
+        expect(error.message).toBe('Username already exists');
+      } finally {
+        expect(userUpdated).toBeNull();
+      }
+    });
+
+    it('should be not update user when email already exist', async () => {
+      const payload: UpdateUserDto = {
+        email: 'john.doe@mail.com',
+      };
+
+      let userUpdated: boolean = null;
+      try {
+        userUpdated = await service.update('10', payload);
+      } catch (error) {
+        expect(error.message).toBe('Email already exists');
+      } finally {
+        expect(userUpdated).toBeNull();
       }
     });
   });
