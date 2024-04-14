@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from './repository/user.repository.interface';
@@ -9,7 +9,10 @@ import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly repository: IUserRepository) {}
+  constructor(
+    @Inject('UserRepository')
+    private readonly repository: IUserRepository,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { name, password, username, email } = createUserDto;
