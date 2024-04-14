@@ -46,7 +46,8 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
-      return await this.movieService.findOne(id);
+      const result = await this.movieService.findOne(id);
+      return res.json(result);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);
     }
@@ -71,7 +72,7 @@ export class MovieController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
-      const result = await this.movieService.remove(+id);
+      const result = await this.movieService.remove(id);
       return res.json(result);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);

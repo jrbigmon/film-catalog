@@ -78,8 +78,18 @@ export class MovieService {
     return result;
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async remove(id: string) {
+    const movieInDB = await this.repository.findById(id);
+
+    if (!movieInDB) {
+      throw new ExceptionsServices(
+        `Movie not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
+    }
+
+    return await this.repository.delete(id);
   }
 
   async findOne(id: string) {
