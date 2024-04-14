@@ -12,5 +12,6 @@ import { UserRepositoryInMemory } from './repository/user.repository.in.memory';
       useValue: new UserRepositoryInMemory(),
     },
   ],
+  exports: [UserService],
 })
 export class UserModule {}
