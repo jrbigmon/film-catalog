@@ -24,7 +24,7 @@ export class MovieRepositoryInMemory implements IMovieRepository {
     }
 
     const filterValue = Object.values(filter)?.[0];
-    const key = Object.keys(filterValue)?.[0];
+    const key = Object.keys(filter)?.[0];
 
     const movie = this.fakeDatabase
       .map((movie) => movie.toJSON())
