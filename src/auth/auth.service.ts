@@ -14,7 +14,7 @@ export class AuthService {
     username: string,
     pass: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findByFilter({ username });
 
     if (!user) {
       throw new UnauthorizedException();
@@ -26,8 +26,10 @@ export class AuthService {
 
     const payload = { userId: user.getId(), username: user.getUsername() };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
+    const result = {
+      access_token: `Bearer ` + (await this.jwtService.signAsync(payload)),
     };
+
+    return result;
   }
 }

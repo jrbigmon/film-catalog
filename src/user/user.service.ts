@@ -6,6 +6,7 @@ import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 import { Crypto } from '../utils/functions/crypto';
 import { User } from './entities/user.entity';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
+import { IFindByFilter } from '../utils/interfaces/find-by-filters.interface';
 
 @Injectable()
 export class UserService {
@@ -125,5 +126,9 @@ export class UserService {
 
   async findOne(id: string) {
     return await this.repository.findById(id);
+  }
+
+  async findByFilter(filter: IFindByFilter): Promise<User> {
+    return await this.repository.findByFilter(filter);
   }
 }

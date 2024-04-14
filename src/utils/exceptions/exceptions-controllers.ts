@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { ExceptionsServices } from './exceptions-services';
-import { HttpStatus, Logger } from '@nestjs/common';
+import { HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
 
 export class ExceptionsControllers {
   public static getException(error: Error | ExceptionsServices, res: Response) {
@@ -11,6 +11,14 @@ export class ExceptionsControllers {
         message: error.message,
         field: error.fieldError,
         statusCode: error.statusCode,
+      });
+    }
+
+    if (error instanceof UnauthorizedException) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        message: error.message,
+        field: 'UNKNOWN',
+        statusCode: HttpStatus.UNAUTHORIZED,
       });
     }
 
