@@ -9,18 +9,21 @@ import {
   Res,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { MovieGenreService } from './movie-genre.service';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { Response } from 'express';
 import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('movie-genre')
 export class MovieGenreController {
   constructor(private readonly movieGenreService: MovieGenreService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createMovieGenreDto: CreateMovieGenreDto,
@@ -35,6 +38,7 @@ export class MovieGenreController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   async findAll(@Res() res: Response) {
     try {
@@ -46,6 +50,7 @@ export class MovieGenreController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -57,6 +62,7 @@ export class MovieGenreController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
@@ -75,6 +81,7 @@ export class MovieGenreController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
