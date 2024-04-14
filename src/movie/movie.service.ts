@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { IMovieRepository } from './repository/movie.repository.interface';
@@ -11,7 +11,9 @@ import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 @Injectable()
 export class MovieService {
   constructor(
+    @Inject('MovieRepository')
     private readonly repository: IMovieRepository,
+    @Inject('MovieGenreService')
     private readonly movieGenreService: IMovieGenreService,
   ) {}
 
@@ -84,7 +86,7 @@ export class MovieService {
     return await this.repository.findById(id);
   }
 
-  async findAll(filters: IFindAllFilters) {
+  async findAll(filters?: IFindAllFilters) {
     return await this.repository.findAll(filters);
   }
 }

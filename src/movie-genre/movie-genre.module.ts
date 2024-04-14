@@ -12,5 +12,6 @@ import { MovieGenreRepositoryInMemory } from './repository/movie-genre.repositor
       useValue: new MovieGenreRepositoryInMemory(),
     },
   ],
+  exports: [MovieGenreService],
 })
 export class MovieGenreModule {}
