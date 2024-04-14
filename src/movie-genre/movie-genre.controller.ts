@@ -14,7 +14,7 @@ import { MovieGenreService } from './movie-genre.service';
 import { CreateMovieGenreDto } from './dto/create-movie-genre.dto';
 import { UpdateMovieGenreDto } from './dto/update-movie-genre.dto';
 import { Response } from 'express';
-import { ExceptionsControllers } from '../utils/exceptions/expcetions-controllers';
+import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
 
 @Controller('movie-genre')
 export class MovieGenreController {

@@ -13,7 +13,7 @@ import {
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { ExceptionsControllers } from '../utils/exceptions/expcetions-controllers';
+import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
 import { Response } from 'express';
 
 @Controller('movie')

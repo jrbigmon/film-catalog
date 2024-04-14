@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
-import { ExceptionsControllers } from '../utils/exceptions/expcetions-controllers';
+import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
 
 @Controller('user')
 export class UserController {
