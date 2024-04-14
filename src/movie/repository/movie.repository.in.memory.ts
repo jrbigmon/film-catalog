@@ -26,15 +26,13 @@ export class MovieRepositoryInMemory implements IMovieRepository {
     const filterValue = Object.values(filter)?.[0];
     const key = Object.keys(filter)?.[0];
 
-    const movie = this.fakeDatabase
+    const movieInDBIndex = this.fakeDatabase
       .map((movie) => movie.toJSON())
-      ?.find((movie) => movie[key] === filterValue);
+      ?.findIndex((movie) => movie[key] === filterValue);
 
-    if (!movie) return null;
+    if (movieInDBIndex === -1) return null;
 
-    return this.fakeDatabase.find(
-      (movieInDB) => movieInDB.getId() === movie.id,
-    );
+    return this.fakeDatabase[movieInDBIndex];
   }
 
   async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
