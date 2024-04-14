@@ -13,4 +13,7 @@ export class IMovie {
   language: string;
   country: string;
   posterURL?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }

@@ -243,6 +243,9 @@ export class Movie {
       country: this.getCountry(),
       synopsis: this.getSynopsis(),
       posterURL: this.getPosterURL(),
+      createdAt: this.getCreatedAt(),
+      updatedAt: this.getUpdatedAt(),
+      deletedAt: this.getDeletedAt(),
     };
   }
 }
