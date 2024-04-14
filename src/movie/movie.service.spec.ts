@@ -120,4 +120,42 @@ describe('MovieService', () => {
       }
     });
   });
+
+  describe('Remove', () => {
+    beforeEach(() => {
+      repository = new MovieRepositoryInMemory([
+        new Movie(
+          'The best movie ever',
+          [new MovieGenre('Action', '123', new Date(), new Date())],
+          'Me',
+          ['Me', 'Me2'],
+          2030,
+          300,
+          10,
+          'Latin',
+          'Greenland',
+          'Best movie ever myself',
+          null,
+          '123',
+        ),
+      ]);
+      service = new MovieService(repository, movieGenreService);
+    });
+
+    it('should remove a movie and return void', async () => {
+      const result = await service.remove('123');
+      const searchValueInDb = await repository.findById('123');
+
+      expect(searchValueInDb).toBeUndefined();
+      expect(result).toBeUndefined();
+    });
+
+    it('should be not delete a movie when the id does not exist', async () => {
+      try {
+        await service.remove('321');
+      } catch (error) {
+        expect(error.message).toBe('Movie not found');
+      }
+    });
+  });
 });
