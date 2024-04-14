@@ -50,5 +50,26 @@ describe('MovieService', () => {
       expect(movieCreated.getId()).not.toBeNull();
       expect(movieCreated.getGenres()).toHaveLength(2);
     });
+
+    it('should be not create a new movie if the genres not found', async () => {
+      const payload: CreateMovieDto = {
+        title: 'The best movie ever',
+        cast: ['me', 'me2'],
+        director: 'me',
+        country: 'Greenland',
+        durationMinutes: 300,
+        genres: ['Any', 'Any2'],
+        language: 'Latin',
+        rating: 10,
+        releaseYear: 2030,
+        synopsis: 'The best movie ever myself',
+      };
+
+      try {
+        await service.create(payload);
+      } catch (error) {
+        expect(error.message).toBe('Movie Genres not found');
+      }
+    });
   });
 });
