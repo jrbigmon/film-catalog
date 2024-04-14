@@ -37,11 +37,15 @@ export class User {
     return newUser;
   }
 
-  public update({ name, username, email, password }: Partial<IUser>) {
+  public update({ name, username, email, password }: Partial<IUser>): void {
     name && this.setName(name);
     username && this.setUsername(username);
     email && this.setEmail(email);
     password && this.setPassword(password);
+  }
+
+  public delete(): void {
+    //implements send event when movie is deleted
   }
 
   public getId(): string {

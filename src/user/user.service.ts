@@ -100,8 +100,20 @@ export class UserService {
     return userUpdated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const userInDB = await this.repository.findById(id);
+
+    if (!userInDB) {
+      throw new ExceptionsServices(
+        `User not found`,
+        HttpStatus.BAD_REQUEST,
+        'id',
+      );
+    }
+
+    userInDB.delete();
+
+    return await this.repository.delete(id);
   }
 
   async findAll(filters?: IFindAllFilters) {

@@ -150,4 +150,44 @@ describe('UserService', () => {
       }
     });
   });
+
+  describe('Delete', () => {
+    beforeEach(() => {
+      repository = new UserRepositoryInMemory([
+        new User(
+          'Vagner',
+          'vagner@mail.com',
+          'vagnerJr',
+          '123',
+          '10',
+          new Date(),
+          new Date(),
+        ),
+      ]);
+      service = new UserService(repository);
+    });
+
+    it('should be remove a user', async () => {
+      const spyRepositoryDelete = jest.spyOn(repository, 'delete');
+
+      const result = await service.remove('10');
+      const userInDB = await repository.findById('10');
+
+      expect(userInDB).toBeUndefined();
+      expect(result).toBeUndefined();
+      expect(spyRepositoryDelete).toBeCalledTimes(1);
+    });
+
+    it('should be not remove a user when the id does not exist', async () => {
+      const spyRepositoryDelete = jest.spyOn(repository, 'delete');
+
+      try {
+        await service.remove('11');
+      } catch (error) {
+        expect(error.message).toBe('User not found');
+      } finally {
+        expect(spyRepositoryDelete).toBeCalledTimes(0);
+      }
+    });
+  });
 });
