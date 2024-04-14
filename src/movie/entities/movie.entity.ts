@@ -101,7 +101,7 @@ export class Movie {
     country && this.setCountry(country);
     director && this.setDirector(director);
     durationMinutes && this.setDurationMinutes(durationMinutes);
-    genres && this.setGenres(genres);
+    genres?.length && this.setGenres(genres);
     language && this.setLanguage(language);
     posterURL && this.setPosterURL(posterURL);
     rating && this.setRating(rating);

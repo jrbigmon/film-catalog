@@ -6,6 +6,7 @@ import { IMovieGenreService } from '../movie-genre/movie-genre.service.interface
 import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 import { Movie } from './entities/movie.entity';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
+import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 
 @Injectable()
 export class MovieService {
@@ -44,7 +45,7 @@ export class MovieService {
 
     if (!movieInDb) {
       throw new ExceptionsServices(
-        `Movie  not found`,
+        `Movie not found`,
         HttpStatus.BAD_REQUEST,
         'id',
       );
@@ -52,16 +53,20 @@ export class MovieService {
 
     const { genres, ...rest } = updateMovieDto;
 
-    const genresInDB = await this.movieGenreService.findAll({
-      filters: { name: genres },
-    });
+    let genresInDB: MovieGenre[] = [];
 
-    if (!genresInDB) {
-      throw new ExceptionsServices(
-        `Movie Genres not found`,
-        HttpStatus.BAD_REQUEST,
-        'genres',
-      );
+    if (genres) {
+      genresInDB = await this.movieGenreService.findAll({
+        filters: { name: genres },
+      });
+
+      if (!genresInDB) {
+        throw new ExceptionsServices(
+          `Movie Genres not found`,
+          HttpStatus.BAD_REQUEST,
+          'genres',
+        );
+      }
     }
 
     movieInDb.update({ genres: genresInDB, ...rest });

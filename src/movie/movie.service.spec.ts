@@ -4,6 +4,8 @@ import { IMovieGenreService } from '../movie-genre/movie-genre.service.interface
 import { MovieGenreRepositoryInMemory } from '../movie-genre/repository/movie-genre.repository.in.memory';
 import { IMovieGenreRepository } from '../movie-genre/repository/movie-genre.repository.interface';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
+import { Movie } from './entities/movie.entity';
 import { MovieService } from './movie.service';
 import { MovieRepositoryInMemory } from './repository/movie.repository.in.memory';
 import { IMovieRepository } from './repository/movie.repository.interface';
@@ -69,6 +71,52 @@ describe('MovieService', () => {
         await service.create(payload);
       } catch (error) {
         expect(error.message).toBe('Movie Genres not found');
+      }
+    });
+  });
+
+  describe('Update', () => {
+    beforeEach(() => {
+      repository = new MovieRepositoryInMemory([
+        new Movie(
+          'The best movie ever',
+          [new MovieGenre('Action', '123', new Date(), new Date())],
+          'Me',
+          ['Me', 'Me2'],
+          2030,
+          300,
+          10,
+          'Latin',
+          'Greenland',
+          'Best movie ever myself',
+          null,
+          '123',
+        ),
+      ]);
+      service = new MovieService(repository, movieGenreService);
+    });
+
+    it('should be update a movie', async () => {
+      const payload: UpdateMovieDto = {
+        title: 'The best best movie ever',
+      };
+
+      const result = await service.update('123', payload);
+      const movieInDB = await service.findOne('123');
+
+      expect(result).toBeTruthy();
+      expect(movieInDB.getTitle()).toBe(payload.title);
+    });
+
+    it('should be not update a movie when the id does not exist', async () => {
+      const payload: UpdateMovieDto = {
+        title: 'The best best movie ever',
+      };
+
+      try {
+        await service.update('321', payload);
+      } catch (error) {
+        expect(error.message).toBe('Movie not found');
       }
     });
   });
