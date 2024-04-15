@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 
 services:
   app:
     build:
-      context: ./
+      context: app
     container_name: app
     networks:
       - node-network
@@ -19,15 +19,13 @@ services:
     container_name: db
     restart: always # restar o container caso ele caia
     tty: true # se precisar usar o modo interativo
-    volumes:
-      - ./mysql:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - node-network
     ports:
-      - '3306:3306'
+      - "3306:3306"
 
 networks:
   node-network:
