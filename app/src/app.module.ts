@@ -10,6 +10,7 @@ import { MovieGenreRepositoryTypeOrm } from './movie-genre/repository/movie-genr
 import { MovieToGenreModule } from './movie-to-genre/movie-to-genre.module';
 import { MovieToGenreRepositoryTypeOrm } from './movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import { MovieRepositoryTypeOrm } from './movie/repository/movie.repository.type.orm';
+import { DataSource } from 'typeorm';
 
 const entities = [
   UserRepositoryTypeOrm,
@@ -38,4 +39,6 @@ const entities = [
     }),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
