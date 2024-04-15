@@ -9,6 +9,7 @@ import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/mov
 import { UserRepositoryTypeOrm } from 'src/user/repository/user.repository.type.orm';
 import { MovieRepositoryTypeOrm } from './repository/movie.repository.type.orm';
 import { MovieGenreModule } from 'src/movie-genre/movie-genre.module';
+import { MovieToGenreModule } from 'src/movie-to-genre/movie-to-genre.module';
 
 const entities = [
   UserRepositoryTypeOrm,
@@ -20,7 +21,7 @@ const entities = [
 const models = TypeOrmModule.forFeature(entities);
 
 @Module({
-  imports: [models, MovieGenreModule],
+  imports: [models, MovieGenreModule, MovieToGenreModule],
   controllers: [MovieController],
   providers: [
     MovieService,

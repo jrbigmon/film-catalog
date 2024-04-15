@@ -4,6 +4,7 @@ import { HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
 
 export class ExceptionsControllers {
   public static getException(error: Error | ExceptionsServices, res: Response) {
+    console.log(error);
     Logger.error(error.message);
 
     if (error instanceof ExceptionsServices) {
