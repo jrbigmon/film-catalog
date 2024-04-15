@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'user',
@@ -22,9 +29,9 @@ export class UserRepositoryTypeOrm {
   @CreateDateColumn()
   public createdAt: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   public updatedAt: Date;
 
-  @CreateDateColumn()
+  @DeleteDateColumn()
   public deletedAt: Date;
 }

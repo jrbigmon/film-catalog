@@ -3,10 +3,12 @@ import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/mov
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToMany,
   OneToMany,
   PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({
@@ -55,9 +57,9 @@ export class MovieRepositoryTypeOrm {
   @CreateDateColumn()
   public createdAt: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   public updatedAt: Date;
 
-  @CreateDateColumn()
+  @DeleteDateColumn()
   public deletedAt?: Date;
 }
