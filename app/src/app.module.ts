@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { UserRepositoryTypeOrm } from './user/repository/user.repository.type.orm';
 
 @Module({
   imports: [
@@ -21,11 +22,9 @@ import { DataSource } from 'typeorm';
       username: process.env.BD_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [UserRepositoryTypeOrm],
       synchronize: true,
     }),
   ],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

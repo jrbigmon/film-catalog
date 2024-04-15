@@ -47,7 +47,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByFilter(filter: IFindByFilter): Promise<User> {
-    const user = await this.userRepository.findOne(filter);
+    const user = await this.userRepository.findOneBy(filter);
 
     return this.mountUser(user);
   }
