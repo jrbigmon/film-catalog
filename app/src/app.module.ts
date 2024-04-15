@@ -7,6 +7,16 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepositoryTypeOrm } from './user/repository/user.repository.type.orm';
 import { MovieGenreRepositoryTypeOrm } from './movie-genre/repository/movie-genre.repository.type.orm';
+import { MovieToGenreModule } from './movie-to-genre/movie-to-genre.module';
+import { MovieToGenreTypeOrm } from './movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { MovieRepositoryTypeOrm } from './movie/repository/movie.repository.type.orm';
+
+const entities = [
+  UserRepositoryTypeOrm,
+  MovieGenreRepositoryTypeOrm,
+  MovieToGenreTypeOrm,
+  MovieRepositoryTypeOrm,
+];
 
 @Module({
   imports: [
@@ -14,6 +24,7 @@ import { MovieGenreRepositoryTypeOrm } from './movie-genre/repository/movie-genr
     MovieGenreModule,
     MovieModule,
     UserModule,
+    MovieToGenreModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: process.env.DB_DIALECT as any,
@@ -22,7 +33,7 @@ import { MovieGenreRepositoryTypeOrm } from './movie-genre/repository/movie-genr
       username: process.env.BD_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [UserRepositoryTypeOrm, MovieGenreRepositoryTypeOrm],
+      entities,
       synchronize: true,
     }),
   ],

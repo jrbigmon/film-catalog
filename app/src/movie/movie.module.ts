@@ -2,17 +2,32 @@ import { Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { MovieGenreService } from '../movie-genre/movie-genre.service';
-import { MovieRepositoryInMemory } from './repository/movie.repository.in.memory';
-import { MovieGenreModule } from '../movie-genre/movie-genre.module';
+import { MovieRepository } from './repository/movie.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieGenreRepositoryTypeOrm } from 'src/movie-genre/repository/movie-genre.repository.type.orm';
+import { MovieToGenreTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { UserRepositoryTypeOrm } from 'src/user/repository/user.repository.type.orm';
+import { MovieRepositoryTypeOrm } from './repository/movie.repository.type.orm';
+import { MovieGenreModule } from 'src/movie-genre/movie-genre.module';
+
+const entities = [
+  UserRepositoryTypeOrm,
+  MovieGenreRepositoryTypeOrm,
+  MovieToGenreTypeOrm,
+  MovieRepositoryTypeOrm,
+];
+
+const models = TypeOrmModule.forFeature(entities);
 
 @Module({
-  imports: [MovieGenreModule],
+  imports: [models, MovieGenreModule],
   controllers: [MovieController],
   providers: [
     MovieService,
+    MovieRepository,
     {
       provide: 'MovieRepository',
-      useValue: new MovieRepositoryInMemory(),
+      useExisting: MovieRepository,
     },
     {
       provide: 'MovieGenreService',
