@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
 import { MovieGenreService } from './movie-genre.service';
 import { MovieGenreController } from './movie-genre.controller';
-import { MovieGenreRepositoryInMemory } from './repository/movie-genre.repository.in.memory';
+import { MovieGenreRepository } from './repository/movie-genre.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieGenreRepositoryTypeOrm } from './repository/movie-genre.repository.type.orm';
+
+const models = TypeOrmModule.forFeature([MovieGenreRepositoryTypeOrm]);
 
 @Module({
+  imports: [models],
   controllers: [MovieGenreController],
   providers: [
     MovieGenreService,
+    MovieGenreRepository,
     {
       provide: 'MovieGenreRepository',
-      useValue: new MovieGenreRepositoryInMemory(),
+      useExisting: MovieGenreRepository,
     },
   ],
   exports: [MovieGenreService],

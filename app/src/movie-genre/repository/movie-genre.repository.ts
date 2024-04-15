@@ -1,21 +1,53 @@
+import { Repository } from 'typeorm';
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../entities/movie-genre.entity';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
+import { MovieGenreRepositoryTypeOrm } from './movie-genre.repository.type.orm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export class MovieGenreRepository implements IMovieGenreRepository {
-  findById(id: string): Promise<MovieGenre> {
-    throw new Error('Method not implemented.');
+  constructor(
+    @InjectRepository(MovieGenreRepositoryTypeOrm)
+    private readonly movieGenreRepository: Repository<MovieGenreRepositoryTypeOrm>,
+  ) {}
+
+  private movieGenreMount(movieGenre: MovieGenreRepositoryTypeOrm): MovieGenre {
+    const { id, name, createdAt, updatedAt, deletedAt } = movieGenre;
+
+    return new MovieGenre(name, id, createdAt, updatedAt, deletedAt);
   }
-  findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
-    throw new Error('Method not implemented.');
+
+  async findById(id: string): Promise<MovieGenre> {
+    const movieGenre = await this.movieGenreRepository.findOneBy({ id });
+
+    return this.movieGenreMount(movieGenre);
   }
-  create(movieGenre: MovieGenre): Promise<MovieGenre> {
-    throw new Error('Method not implemented.');
+
+  async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
+    const movieGenres = await this.movieGenreRepository.find(filters.filters);
+
+    if (!movieGenres?.length) return [];
+
+    return movieGenres?.map((movieGenre) => this.movieGenreMount(movieGenre));
   }
-  update(id: string, movieGenre: MovieGenre): Promise<boolean> {
-    throw new Error('Method not implemented.');
+
+  async create(movieGenre: MovieGenre): Promise<MovieGenre> {
+    const movieGenreCreated = await this.movieGenreRepository.save({
+      ...movieGenre,
+    });
+
+    return this.movieGenreMount(movieGenreCreated);
   }
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async update(id: string, movieGenre: MovieGenre): Promise<boolean> {
+    const movieGenreUpdated = await this.movieGenreRepository.update(id, {
+      ...movieGenre,
+    });
+
+    return movieGenreUpdated.affected > 0;
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.movieGenreRepository.delete(id);
   }
 }
