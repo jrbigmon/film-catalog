@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryColumn,
@@ -22,6 +23,7 @@ export class MovieRepositoryTypeOrm {
   public title: string;
 
   @ManyToMany(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movies)
+  @JoinTable()
   public genres: MovieGenreRepositoryTypeOrm[];
 
   @OneToMany(

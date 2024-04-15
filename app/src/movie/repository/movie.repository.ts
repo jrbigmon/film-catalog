@@ -64,7 +64,7 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
-    const movies = await this.movieRepository.find(filters.filters);
+    const movies = await this.movieRepository.find(filters?.filters);
 
     if (!movies?.length) return [];
 
