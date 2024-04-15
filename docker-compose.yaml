@@ -20,12 +20,10 @@ services:
     restart: always # restar o container caso ele caia
     tty: true # se precisar usar o modo interativo
     environment:
-      - MYSQL_DATABASE=nodedb
+      - MYSQL_DATABASE=filmcatalogs
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - node-network
-    ports:
-      - "3306:3306"
 
 networks:
   node-network:
