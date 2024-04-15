@@ -35,7 +35,6 @@ describe('MovieService', () => {
     it('should be create a new movie', async () => {
       const payload: CreateMovieDto = {
         title: 'The best movie ever',
-        cast: ['me', 'me2'],
         director: 'me',
         country: 'Greenland',
         durationMinutes: 300,
@@ -56,7 +55,6 @@ describe('MovieService', () => {
     it('should be not create a new movie if the genres not found', async () => {
       const payload: CreateMovieDto = {
         title: 'The best movie ever',
-        cast: ['me', 'me2'],
         director: 'me',
         country: 'Greenland',
         durationMinutes: 300,
@@ -82,7 +80,6 @@ describe('MovieService', () => {
           'The best movie ever',
           [new MovieGenre('Action', '123', new Date(), new Date())],
           'Me',
-          ['Me', 'Me2'],
           2030,
           300,
           10,
@@ -128,7 +125,6 @@ describe('MovieService', () => {
           'The best movie ever',
           [new MovieGenre('Action', '123', new Date(), new Date())],
           'Me',
-          ['Me', 'Me2'],
           2030,
           300,
           10,

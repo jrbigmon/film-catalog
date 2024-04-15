@@ -7,7 +7,6 @@ export class Movie {
   private title: string;
   private genres: MovieGenre[];
   private director: string;
-  private cast: string[];
   private releaseYear: number;
   private durationMinutes: number;
   private rating: number;
@@ -23,7 +22,6 @@ export class Movie {
     title: string,
     genres: MovieGenre[],
     director: string,
-    cast: string[],
     releaseYear: number,
     durationMinutes: number,
     rating: number,
@@ -39,7 +37,6 @@ export class Movie {
     this.title = title;
     this.genres = genres;
     this.director = director;
-    this.cast = cast;
     this.releaseYear = releaseYear;
     this.durationMinutes = durationMinutes;
     this.rating = rating;
@@ -57,7 +54,6 @@ export class Movie {
     title,
     genres,
     director,
-    cast,
     releaseYear,
     durationMinutes,
     rating,
@@ -70,7 +66,6 @@ export class Movie {
       title,
       genres,
       director,
-      cast,
       releaseYear,
       durationMinutes,
       rating,
@@ -85,7 +80,6 @@ export class Movie {
 
   public update({
     title,
-    cast,
     country,
     director,
     durationMinutes,
@@ -97,7 +91,6 @@ export class Movie {
     synopsis,
   }: Partial<IMovie>): void {
     title && this.setTitle(title);
-    cast && this.setCast(cast);
     country && this.setCountry(country);
     director && this.setDirector(director);
     durationMinutes && this.setDurationMinutes(durationMinutes);
@@ -127,10 +120,6 @@ export class Movie {
 
   public getDirector(): string {
     return this.director;
-  }
-
-  public getCast(): string[] {
-    return this.cast;
   }
 
   public getReleaseYear(): number {
@@ -189,10 +178,6 @@ export class Movie {
     this.director = director;
   }
 
-  public setCast(cast: string[]): void {
-    this.cast = cast;
-  }
-
   public setReleaseYear(releaseYear: number): void {
     this.releaseYear = releaseYear;
   }
@@ -239,7 +224,6 @@ export class Movie {
       title: this.getTitle(),
       genres: this.getGenres(),
       director: this.getDirector(),
-      cast: this.getCast(),
       releaseYear: this.getReleaseYear(),
       durationMinutes: this.getDurationMinutes(),
       rating: this.getRating(),

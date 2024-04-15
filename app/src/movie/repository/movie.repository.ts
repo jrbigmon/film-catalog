@@ -6,6 +6,7 @@ import { Movie } from '../entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MovieRepositoryTypeOrm } from './movie.repository.type.orm';
+import { MovieGenreRepository } from 'src/movie-genre/repository/movie-genre.repository';
 
 @Injectable()
 export class MovieRepository implements IMovieRepository {
@@ -14,13 +15,12 @@ export class MovieRepository implements IMovieRepository {
     private readonly movieRepository: Repository<MovieRepositoryTypeOrm>,
   ) {}
 
-  private movieMount(movie: MovieRepositoryTypeOrm): Movie {
+  public static movieMount(movie: MovieRepositoryTypeOrm): Movie {
     const {
       id,
       title,
       genres,
       director,
-      cast,
       releaseYear,
       durationMinutes,
       rating,
@@ -35,9 +35,8 @@ export class MovieRepository implements IMovieRepository {
 
     return new Movie(
       title,
-      genres,
+      genres?.map((genre) => MovieGenreRepository.movieGenreMount(genre)),
       director,
-      cast,
       releaseYear,
       durationMinutes,
       rating,
@@ -55,11 +54,11 @@ export class MovieRepository implements IMovieRepository {
   async findById(id: string): Promise<Movie> {
     const movie = await this.movieRepository.findOneBy({ id });
 
-    return this.movieMount(movie);
+    return MovieRepository.movieMount(movie);
   }
   async findByFilter(filter: IFindByFilter): Promise<Movie> {
     const movie = await this.movieRepository.findOneBy(filter);
-    return this.movieMount(movie);
+    return MovieRepository.movieMount(movie);
   }
 
   async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
@@ -67,12 +66,12 @@ export class MovieRepository implements IMovieRepository {
 
     if (!movies?.length) return [];
 
-    return movies?.map((movie) => this.movieMount(movie));
+    return movies?.map((movie) => MovieRepository.movieMount(movie));
   }
 
   async create(movie: Movie): Promise<Movie> {
     const movieCreated = await this.movieRepository.save({ ...movie });
-    return this.movieMount(movieCreated);
+    return MovieRepository.movieMount(movieCreated);
   }
 
   async update(id: string, movie: Movie): Promise<boolean> {

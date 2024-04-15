@@ -5,7 +5,6 @@ export class IMovie {
   title: string;
   genres: MovieGenre[];
   director: string;
-  cast: string[];
   releaseYear: number;
   durationMinutes: number;
   rating: number;
