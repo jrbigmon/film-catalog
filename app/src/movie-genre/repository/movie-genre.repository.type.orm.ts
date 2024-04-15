@@ -1,4 +1,4 @@
-import { MovieToGenreTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import { MovieRepositoryTypeOrm } from 'src/movie/repository/movie.repository.type.orm';
 import {
   Column,
@@ -30,8 +30,11 @@ export class MovieGenreRepositoryTypeOrm {
   @DeleteDateColumn()
   public deletedAt: Date;
 
-  @OneToMany(() => MovieToGenreTypeOrm, (movieToGenre) => movieToGenre.genre)
-  public movieToGenre: MovieToGenreTypeOrm[];
+  @OneToMany(
+    () => MovieToGenreRepositoryTypeOrm,
+    (movieToGenre) => movieToGenre.genre,
+  )
+  public movieToGenre: MovieToGenreRepositoryTypeOrm[];
 
   @ManyToMany(() => MovieRepositoryTypeOrm, (movie) => movie.genres)
   public movies: MovieRepositoryTypeOrm[];

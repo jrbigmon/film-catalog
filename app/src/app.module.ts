@@ -8,13 +8,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepositoryTypeOrm } from './user/repository/user.repository.type.orm';
 import { MovieGenreRepositoryTypeOrm } from './movie-genre/repository/movie-genre.repository.type.orm';
 import { MovieToGenreModule } from './movie-to-genre/movie-to-genre.module';
-import { MovieToGenreTypeOrm } from './movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { MovieToGenreRepositoryTypeOrm } from './movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import { MovieRepositoryTypeOrm } from './movie/repository/movie.repository.type.orm';
 
 const entities = [
   UserRepositoryTypeOrm,
   MovieGenreRepositoryTypeOrm,
-  MovieToGenreTypeOrm,
+  MovieToGenreRepositoryTypeOrm,
   MovieRepositoryTypeOrm,
 ];
 

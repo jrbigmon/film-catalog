@@ -1,6 +1,5 @@
-import { MovieGenre } from 'src/movie-genre/entities/movie-genre.entity';
 import { MovieGenreRepositoryTypeOrm } from 'src/movie-genre/repository/movie-genre.repository.type.orm';
-import { MovieToGenreTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import {
   Column,
   CreateDateColumn,
@@ -23,8 +22,11 @@ export class MovieRepositoryTypeOrm {
   @ManyToMany(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movies)
   public genres: MovieGenreRepositoryTypeOrm[];
 
-  @OneToMany(() => MovieToGenreTypeOrm, (movieToGenre) => movieToGenre.movie)
-  public movieToGenre: MovieToGenreTypeOrm[];
+  @OneToMany(
+    () => MovieToGenreRepositoryTypeOrm,
+    (movieToGenre) => movieToGenre.movie,
+  )
+  public movieToGenre: MovieToGenreRepositoryTypeOrm[];
 
   @Column()
   public director: string;

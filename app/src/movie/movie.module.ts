@@ -5,7 +5,7 @@ import { MovieGenreService } from '../movie-genre/movie-genre.service';
 import { MovieRepository } from './repository/movie.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieGenreRepositoryTypeOrm } from 'src/movie-genre/repository/movie-genre.repository.type.orm';
-import { MovieToGenreTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import { UserRepositoryTypeOrm } from 'src/user/repository/user.repository.type.orm';
 import { MovieRepositoryTypeOrm } from './repository/movie.repository.type.orm';
 import { MovieGenreModule } from 'src/movie-genre/movie-genre.module';
@@ -13,7 +13,7 @@ import { MovieGenreModule } from 'src/movie-genre/movie-genre.module';
 const entities = [
   UserRepositoryTypeOrm,
   MovieGenreRepositoryTypeOrm,
-  MovieToGenreTypeOrm,
+  MovieToGenreRepositoryTypeOrm,
   MovieRepositoryTypeOrm,
 ];
 
