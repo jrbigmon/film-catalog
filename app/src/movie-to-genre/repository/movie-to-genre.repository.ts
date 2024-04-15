@@ -1,10 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Entity, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MovieToGenreRepositoryTypeOrm } from './movie-to-genre.repository.type.orm';
+import { Injectable } from '@nestjs/common';
 
-@Entity({
-  name: 'movie_to_genre',
-})
+@Injectable()
 export class MovieToGenreRepository {
   constructor(
     @InjectRepository(MovieToGenreRepositoryTypeOrm)
