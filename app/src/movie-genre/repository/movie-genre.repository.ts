@@ -4,14 +4,18 @@ import { MovieGenre } from '../entities/movie-genre.entity';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
 import { MovieGenreRepositoryTypeOrm } from './movie-genre.repository.type.orm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MovieGenreRepository implements IMovieGenreRepository {
   constructor(
     @InjectRepository(MovieGenreRepositoryTypeOrm)
     private readonly movieGenreRepository: Repository<MovieGenreRepositoryTypeOrm>,
   ) {}
 
-  private movieGenreMount(movieGenre: MovieGenreRepositoryTypeOrm): MovieGenre {
+  public static movieGenreMount(
+    movieGenre: MovieGenreRepositoryTypeOrm,
+  ): MovieGenre {
     const { id, name, createdAt, updatedAt, deletedAt } = movieGenre;
 
     return new MovieGenre(name, id, createdAt, updatedAt, deletedAt);
@@ -20,7 +24,7 @@ export class MovieGenreRepository implements IMovieGenreRepository {
   async findById(id: string): Promise<MovieGenre> {
     const movieGenre = await this.movieGenreRepository.findOneBy({ id });
 
-    return this.movieGenreMount(movieGenre);
+    return MovieGenreRepository.movieGenreMount(movieGenre);
   }
 
   async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
@@ -28,7 +32,9 @@ export class MovieGenreRepository implements IMovieGenreRepository {
 
     if (!movieGenres?.length) return [];
 
-    return movieGenres?.map((movieGenre) => this.movieGenreMount(movieGenre));
+    return movieGenres?.map((movieGenre) =>
+      MovieGenreRepository.movieGenreMount(movieGenre),
+    );
   }
 
   async create(movieGenre: MovieGenre): Promise<MovieGenre> {
@@ -36,7 +42,7 @@ export class MovieGenreRepository implements IMovieGenreRepository {
       ...movieGenre,
     });
 
-    return this.movieGenreMount(movieGenreCreated);
+    return MovieGenreRepository.movieGenreMount(movieGenreCreated);
   }
 
   async update(id: string, movieGenre: MovieGenre): Promise<boolean> {

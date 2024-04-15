@@ -1,4 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { MovieGenre } from 'src/movie-genre/entities/movie-genre.entity';
+import { MovieGenreRepositoryTypeOrm } from 'src/movie-genre/repository/movie-genre.repository.type.orm';
+import { MovieToGenreTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'movie',
@@ -10,14 +20,14 @@ export class MovieRepositoryTypeOrm {
   @Column()
   public title: string;
 
-  @Column()
-  public genres: any[];
+  @ManyToMany(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movies)
+  public genres: MovieGenreRepositoryTypeOrm[];
+
+  @OneToMany(() => MovieToGenreTypeOrm, (movieToGenre) => movieToGenre.movie)
+  public movieToGenre: MovieToGenreTypeOrm[];
 
   @Column()
   public director: string;
-
-  @Column()
-  public cast: string[];
 
   @Column()
   public releaseYear: number;
