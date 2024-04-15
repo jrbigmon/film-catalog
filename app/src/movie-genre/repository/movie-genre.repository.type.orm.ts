@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'movie-genre',
+  name: 'movie_genre',
 })
 export class MovieGenreRepositoryTypeOrm {
   @PrimaryColumn()

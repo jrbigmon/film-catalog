@@ -34,7 +34,7 @@ const entities = [
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       entities,
-      synchronize: true,
+      // synchronize: true,
     }),
   ],
 })

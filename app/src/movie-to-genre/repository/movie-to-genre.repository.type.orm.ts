@@ -3,7 +3,7 @@ import { MovieRepositoryTypeOrm } from 'src/movie/repository/movie.repository.ty
 import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity({
-  name: 'movie-to-genre',
+  name: 'movie_to_genre',
 })
 export class MovieToGenreRepositoryTypeOrm {
   @PrimaryColumn()
