@@ -3,17 +3,7 @@ import { MovieGenreService } from './movie-genre.service';
 import { MovieGenreController } from './movie-genre.controller';
 import { MovieGenreRepository } from './repository/movie-genre.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MovieToGenreRepositoryTypeOrm } from 'src/movie-to-genre/repository/movie-to-genre.repository.type.orm';
-import { MovieRepositoryTypeOrm } from 'src/movie/repository/movie.repository.type.orm';
-import { UserRepositoryTypeOrm } from 'src/user/repository/user.repository.type.orm';
-import { MovieGenreRepositoryTypeOrm } from './repository/movie-genre.repository.type.orm';
-
-const entities = [
-  UserRepositoryTypeOrm,
-  MovieGenreRepositoryTypeOrm,
-  MovieToGenreRepositoryTypeOrm,
-  MovieRepositoryTypeOrm,
-];
+import entities from '../database/entities/type.orm.entities';
 
 const models = TypeOrmModule.forFeature(entities);
 
