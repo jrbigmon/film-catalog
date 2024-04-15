@@ -11,7 +11,7 @@ import { MovieRepositoryTypeOrm } from './movie.repository.type.orm';
 export class MovieRepository implements IMovieRepository {
   constructor(
     @InjectRepository(MovieRepositoryTypeOrm)
-    private readonly movieRepositoryTypeOrm: Repository<MovieRepositoryTypeOrm>,
+    private readonly movieRepository: Repository<MovieRepositoryTypeOrm>,
   ) {}
 
   private movieMount(movie: MovieRepositoryTypeOrm): Movie {
@@ -53,17 +53,17 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async findById(id: string): Promise<Movie> {
-    const movie = await this.movieRepositoryTypeOrm.findOneBy({ id });
+    const movie = await this.movieRepository.findOneBy({ id });
 
     return this.movieMount(movie);
   }
   async findByFilter(filter: IFindByFilter): Promise<Movie> {
-    const movie = await this.movieRepositoryTypeOrm.findOneBy(filter);
+    const movie = await this.movieRepository.findOneBy(filter);
     return this.movieMount(movie);
   }
 
   async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
-    const movies = await this.movieRepositoryTypeOrm.find(filters.filters);
+    const movies = await this.movieRepository.find(filters.filters);
 
     if (!movies?.length) return [];
 
@@ -71,14 +71,17 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async create(movie: Movie): Promise<Movie> {
-    const movieCreated = await this.movieRepositoryTypeOrm.save({ ...movie });
+    const movieCreated = await this.movieRepository.save({ ...movie });
+    return this.movieMount(movieCreated);
   }
 
-  update(id: string, movie: Movie): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async update(id: string, movie: Movie): Promise<boolean> {
+    const movieUpdated = await this.movieRepository.update(id, { ...movie });
+
+    return movieUpdated?.affected > 0;
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    await this.movieRepository.delete(id);
   }
 }
