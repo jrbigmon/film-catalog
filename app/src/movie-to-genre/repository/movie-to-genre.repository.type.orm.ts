@@ -1,20 +1,15 @@
-import { MovieGenreRepositoryTypeOrm } from 'src/movie-genre/repository/movie-genre.repository.type.orm';
-import { MovieRepositoryTypeOrm } from 'src/movie/repository/movie.repository.type.orm';
-import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity({
   name: 'movie_to_genre',
 })
 export class MovieToGenreRepositoryTypeOrm {
-  @PrimaryColumn()
+  @PrimaryColumn({ generated: 'uuid' })
+  public id: string;
+
+  @Column({ name: 'movie_id', foreignKeyConstraintName: 'movie_id' })
   public movieId: string;
 
-  @PrimaryColumn()
+  @Column({ name: 'genre_id' })
   public genreId: string;
-
-  @ManyToOne(() => MovieRepositoryTypeOrm, (movie) => movie.genres)
-  public movie: MovieRepositoryTypeOrm;
-
-  @ManyToOne(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movieToGenre)
-  public genre: MovieGenreRepositoryTypeOrm;
 }

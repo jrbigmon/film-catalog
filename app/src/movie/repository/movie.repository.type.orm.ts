@@ -21,17 +21,6 @@ export class MovieRepositoryTypeOrm {
   public title: string;
 
   @ManyToMany(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movies)
-  @JoinTable({
-    name: 'movie_to_genre',
-    joinColumn: {
-      name: 'movieId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'genreId',
-      referencedColumnName: 'id',
-    },
-  })
   public genres: MovieGenreRepositoryTypeOrm[];
 
   @Column()
