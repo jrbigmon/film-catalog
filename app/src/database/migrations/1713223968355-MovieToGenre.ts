@@ -12,14 +12,20 @@ export class MovieToGenre1713223968355 implements MigrationInterface {
         name: 'movie_to_genre',
         columns: [
           {
-            name: 'movie_id',
+            name: 'id',
             type: 'varchar(255)',
             isPrimary: true,
+            isNullable: false,
+          },
+          {
+            name: 'movie_id',
+            type: 'varchar(255)',
+            isNullable: false,
           },
           {
             name: 'genre_id',
             type: 'varchar(255)',
-            isPrimary: true,
+            isNullable: false,
           },
         ],
       }),
