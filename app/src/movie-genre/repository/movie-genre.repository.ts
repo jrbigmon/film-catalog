@@ -28,7 +28,7 @@ export class MovieGenreRepository implements IMovieGenreRepository {
   }
 
   async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
-    const movieGenres = await this.movieGenreRepository.find(filters.filters);
+    const movieGenres = await this.movieGenreRepository.find(filters?.filters);
 
     if (!movieGenres?.length) return [];
 
