@@ -8,12 +8,14 @@ import {
   Res,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -31,6 +33,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
@@ -46,6 +49,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
