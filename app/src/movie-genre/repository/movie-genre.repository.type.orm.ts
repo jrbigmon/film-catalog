@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryColumn,
   UpdateDateColumn,
@@ -28,6 +29,7 @@ export class MovieGenreRepositoryTypeOrm {
   @DeleteDateColumn({ name: 'deleted_at', default: null })
   public deletedAt: Date;
 
-  @ManyToMany(() => MovieRepositoryTypeOrm, (movie) => movie.genres)
+  @ManyToMany(() => MovieRepositoryTypeOrm)
+  @JoinTable()
   public movies: MovieRepositoryTypeOrm[];
 }

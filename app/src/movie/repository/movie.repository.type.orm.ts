@@ -20,7 +20,8 @@ export class MovieRepositoryTypeOrm {
   @Column()
   public title: string;
 
-  @ManyToMany(() => MovieGenreRepositoryTypeOrm, (genre) => genre.movies)
+  @ManyToMany(() => MovieGenreRepositoryTypeOrm)
+  @JoinTable()
   public genres: MovieGenreRepositoryTypeOrm[];
 
   @Column()
