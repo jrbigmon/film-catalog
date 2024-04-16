@@ -26,12 +26,12 @@ export class UserRepositoryTypeOrm {
   @Column()
   public password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ name: 'deleted_at', default: null })
   public deletedAt: Date;
 }

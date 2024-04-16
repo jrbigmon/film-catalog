@@ -37,10 +37,10 @@ export class MovieRepositoryTypeOrm {
   @Column()
   public director: string;
 
-  @Column()
+  @Column({ name: 'release_year' })
   public releaseYear: number;
 
-  @Column()
+  @Column({ name: 'duration_minutes' })
   public durationMinutes: number;
 
   @Column()
@@ -55,15 +55,15 @@ export class MovieRepositoryTypeOrm {
   @Column()
   public synopsis?: string;
 
-  @Column()
+  @Column({ name: 'poster_url' })
   public posterURL?: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date;
 
-  @DeleteDateColumn()
-  public deletedAt?: Date;
+  @DeleteDateColumn({ name: 'deleted_at', default: null })
+  public deletedAt: Date;
 }
