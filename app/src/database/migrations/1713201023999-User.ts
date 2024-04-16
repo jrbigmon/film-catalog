@@ -46,6 +46,8 @@ export class User1713201023999 implements MigrationInterface {
           {
             name: 'deleted_at',
             type: 'timestamp',
+            isNullable: true,
+            default: null,
           },
         ],
       }),

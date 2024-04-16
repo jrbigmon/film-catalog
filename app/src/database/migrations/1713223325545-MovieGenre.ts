@@ -31,6 +31,8 @@ export class MovieGenre1713223325545 implements MigrationInterface {
           {
             name: 'deleted_at',
             type: 'timestamp',
+            isNullable: true,
+            default: null,
           },
         ],
       }),
