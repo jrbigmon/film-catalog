@@ -56,4 +56,16 @@ export class MovieGenreRepository implements IMovieGenreRepository {
   async delete(id: string): Promise<void> {
     await this.movieGenreRepository.delete(id);
   }
+
+  async findByName(name: string): Promise<MovieGenre> {
+    if (!name) return null;
+
+    const movieGenre = await this.movieGenreRepository.findOne({
+      where: { name },
+    });
+
+    if (!movieGenre) return null;
+
+    return MovieGenreRepository.movieGenreMount(movieGenre);
+  }
 }

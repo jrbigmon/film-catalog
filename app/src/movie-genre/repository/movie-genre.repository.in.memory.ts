@@ -69,4 +69,8 @@ export class MovieGenreRepositoryInMemory implements IMovieGenreRepository {
       movieGenreInDB.setDeletedAt(new Date());
     }
   }
+
+  async findByName(name: string): Promise<MovieGenre> {
+    return this.fakeDatabase.find((genre) => genre.getName() === name);
+  }
 }

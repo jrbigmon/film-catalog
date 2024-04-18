@@ -7,4 +7,5 @@ export interface IMovieGenreRepository {
   create(movieGenre: MovieGenre): Promise<MovieGenre>;
   update(id: string, movieGenre: MovieGenre): Promise<boolean>;
   delete(id: string): Promise<void>;
+  findByName(name: string): Promise<MovieGenre>;
 }

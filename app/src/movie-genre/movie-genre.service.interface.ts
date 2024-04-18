@@ -12,4 +12,5 @@ export interface IMovieGenreService {
   remove(id: string): Promise<void>;
   findAll(findAllFilters?: IFindAllFilters): Promise<MovieGenre[]>;
   findOne(id: string): Promise<MovieGenre>;
+  getOrCreate(genres: string[]): Promise<MovieGenre[]>;
 }

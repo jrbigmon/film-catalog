@@ -79,4 +79,20 @@ export class MovieGenreService implements IMovieGenreService {
 
     return movieGenre;
   }
+
+  public async getOrCreate(genres: string[]): Promise<MovieGenre[]> {
+    if (!genres || !genres.length) return [];
+
+    return await Promise.all(
+      genres?.map(async (genre) => {
+        const genreInDB = await this.repository.findByName(genre);
+
+        if (genreInDB) return genreInDB;
+
+        return await this.create({
+          name: genre,
+        });
+      }),
+    );
+  }
 }

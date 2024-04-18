@@ -29,7 +29,6 @@ export class MovieGenreRepositoryTypeOrm {
   @DeleteDateColumn({ name: 'deleted_at', default: null })
   public deletedAt: Date;
 
-  @ManyToMany(() => MovieRepositoryTypeOrm)
-  @JoinTable()
+  @ManyToMany(() => MovieRepositoryTypeOrm, (movie) => movie.genres)
   public movies: MovieRepositoryTypeOrm[];
 }
