@@ -3,6 +3,10 @@ import { MovieGenreService } from '../movie-genre/movie-genre.service';
 import { IMovieGenreService } from '../movie-genre/movie-genre.service.interface';
 import { MovieGenreRepositoryInMemory } from '../movie-genre/repository/movie-genre.repository.in.memory';
 import { IMovieGenreRepository } from '../movie-genre/repository/movie-genre.repository.interface';
+import { MovieToGenreService } from '../movie-to-genre/movie-to-genre.service';
+import { IMovieToGenreService } from '../movie-to-genre/movie-to-genre.service.interface';
+import { MovieToGenreRepositoryInMemory } from '../movie-to-genre/repository/movie-to-genre.repository.in.memory';
+import { IMovieToGenreRepository } from '../movie-to-genre/repository/movie-to-genre.repository.interface';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
@@ -17,6 +21,9 @@ describe('MovieService', () => {
   let movieGenreService: IMovieGenreService;
   let movieGenreRepository: IMovieGenreRepository;
 
+  let movieToGenreService: IMovieToGenreService;
+  let movieToGenreRepository: IMovieToGenreRepository;
+
   beforeAll(() => {
     movieGenreRepository = new MovieGenreRepositoryInMemory([
       new MovieGenre('Action', '123', new Date(), new Date()),
@@ -24,12 +31,19 @@ describe('MovieService', () => {
       new MovieGenre('Suspense', '123', new Date(), new Date()),
     ]);
     movieGenreService = new MovieGenreService(movieGenreRepository);
+
+    movieToGenreRepository = new MovieToGenreRepositoryInMemory();
+    movieToGenreService = new MovieToGenreService(movieToGenreRepository);
   });
 
   describe('Create', () => {
     beforeEach(() => {
       repository = new MovieRepositoryInMemory();
-      service = new MovieService(repository, movieGenreService);
+      service = new MovieService(
+        repository,
+        movieGenreService,
+        movieToGenreService,
+      );
     });
 
     it('should be create a new movie', async () => {
@@ -90,7 +104,11 @@ describe('MovieService', () => {
           '123',
         ),
       ]);
-      service = new MovieService(repository, movieGenreService);
+      service = new MovieService(
+        repository,
+        movieGenreService,
+        movieToGenreService,
+      );
     });
 
     it('should be update a movie', async () => {
@@ -135,7 +153,11 @@ describe('MovieService', () => {
           '123',
         ),
       ]);
-      service = new MovieService(repository, movieGenreService);
+      service = new MovieService(
+        repository,
+        movieGenreService,
+        movieToGenreService,
+      );
     });
 
     it('should remove a movie and return void', async () => {
