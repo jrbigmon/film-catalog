@@ -7,6 +7,7 @@ import { ExceptionsServices } from '../utils/exceptions/exceptions-services';
 import { Movie } from './entities/movie.entity';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
+import { IMovieToGenreService } from '../movie-to-genre/movie-to-genre.service.interface';
 
 @Injectable()
 export class MovieService {
@@ -15,16 +16,16 @@ export class MovieService {
     private readonly repository: IMovieRepository,
     @Inject('MovieGenreService')
     private readonly movieGenreService: IMovieGenreService,
+    @Inject('MovieToGenreService')
+    private readonly movieToGenreService: IMovieToGenreService,
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
     const { genres, ...rest } = createMovieDto;
 
-    const genresInDB = await this.movieGenreService.findAll({
-      filters: { name: genres },
-    });
+    const genresCreated = await this.movieGenreService.getOrCreate(genres);
 
-    if (!genresInDB?.length) {
+    if (!genresCreated?.length) {
       throw new ExceptionsServices(
         `Movie Genres not found`,
         HttpStatus.BAD_REQUEST,
@@ -34,10 +35,17 @@ export class MovieService {
 
     const newMovie = Movie.create({
       ...rest,
-      genres: genresInDB,
+      genres: genresCreated,
     });
 
     const movieCreated = await this.repository.create(newMovie);
+
+    if (movieCreated) {
+      this.movieToGenreService.associateMovieToGenres(
+        movieCreated.getId(),
+        newMovie.getGenres(),
+      );
+    }
 
     return movieCreated;
   }

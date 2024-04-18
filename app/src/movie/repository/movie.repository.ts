@@ -1,4 +1,3 @@
-import { MovieToGenreRepository } from './../../movie-to-genre/repository/movie-to-genre.repository';
 import { Injectable } from '@nestjs/common';
 import { IMovieRepository } from './movie.repository.interface';
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
@@ -14,7 +13,6 @@ export class MovieRepository implements IMovieRepository {
   constructor(
     @InjectRepository(MovieRepositoryTypeOrm)
     private readonly movieRepository: Repository<MovieRepositoryTypeOrm>,
-    private readonly movieToGenreRepository: MovieToGenreRepository,
   ) {}
 
   public static movieMount(movie: MovieRepositoryTypeOrm): Movie {
@@ -64,7 +62,12 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async findAll(filters?: IFindAllFilters): Promise<Movie[]> {
-    const movies = await this.movieRepository.find(filters?.filters);
+    const movies = await this.movieRepository.find({
+      ...filters?.filters,
+      relations: {
+        genres: true,
+      },
+    });
 
     if (!movies?.length) return [];
 
@@ -72,26 +75,13 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async create(movie: Movie): Promise<Movie> {
-    const { genres, ...rest } = movie.toJSON();
-
-    const movieCreated = await this.movieRepository.save({ ...rest });
-
-    if (movieCreated?.id) {
-      await this.movieToGenreRepository.associateMovieToGenres(
-        movieCreated.id,
-        genres,
-      );
-    }
+    const movieCreated = await this.movieRepository.save({ ...movie });
 
     return MovieRepository.movieMount(movieCreated);
   }
 
   async update(id: string, movie: Movie): Promise<boolean> {
-    const { genres, ...rest } = movie.toJSON();
-
-    await this.movieToGenreRepository.associateMovieToGenres(id, genres);
-
-    const movieUpdated = await this.movieRepository.update(id, { ...rest });
+    const movieUpdated = await this.movieRepository.update(id, { ...movie });
 
     return movieUpdated?.affected > 0;
   }
