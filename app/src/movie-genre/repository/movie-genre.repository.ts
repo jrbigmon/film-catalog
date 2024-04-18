@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../entities/movie-genre.entity';
 import { IMovieGenreRepository } from './movie-genre.repository.interface';
@@ -13,6 +13,14 @@ export class MovieGenreRepository implements IMovieGenreRepository {
     private readonly movieGenreRepository: Repository<MovieGenreRepositoryTypeOrm>,
   ) {}
 
+  private getRepository(
+    queryRunner?: QueryRunner,
+  ): Repository<MovieGenreRepositoryTypeOrm> {
+    return queryRunner
+      ? queryRunner.manager.getRepository(MovieGenreRepositoryTypeOrm)
+      : this.movieGenreRepository;
+  }
+
   public static movieGenreMount(
     movieGenre: MovieGenreRepositoryTypeOrm,
   ): MovieGenre {
@@ -21,14 +29,19 @@ export class MovieGenreRepository implements IMovieGenreRepository {
     return new MovieGenre(name, id, createdAt, updatedAt, deletedAt);
   }
 
-  async findById(id: string): Promise<MovieGenre> {
-    const movieGenre = await this.movieGenreRepository.findOneBy({ id });
+  async findById(id: string, queryRunner?: QueryRunner): Promise<MovieGenre> {
+    const movieGenre = await this.getRepository(queryRunner).findOneBy({ id });
 
     return MovieGenreRepository.movieGenreMount(movieGenre);
   }
 
-  async findAll(filters?: IFindAllFilters): Promise<MovieGenre[]> {
-    const movieGenres = await this.movieGenreRepository.find(filters?.filters);
+  async findAll(
+    filters?: IFindAllFilters,
+    queryRunner?: QueryRunner,
+  ): Promise<MovieGenre[]> {
+    const movieGenres = await this.getRepository(queryRunner).find(
+      filters?.filters,
+    );
 
     if (!movieGenres?.length) return [];
 
@@ -37,30 +50,40 @@ export class MovieGenreRepository implements IMovieGenreRepository {
     );
   }
 
-  async create(movieGenre: MovieGenre): Promise<MovieGenre> {
-    const movieGenreCreated = await this.movieGenreRepository.save({
+  async create(
+    movieGenre: MovieGenre,
+    queryRunner?: QueryRunner,
+  ): Promise<MovieGenre> {
+    const movieGenreCreated = await this.getRepository(queryRunner).save({
       ...movieGenre,
     });
 
     return MovieGenreRepository.movieGenreMount(movieGenreCreated);
   }
 
-  async update(id: string, movieGenre: MovieGenre): Promise<boolean> {
-    const movieGenreUpdated = await this.movieGenreRepository.update(id, {
+  async update(
+    id: string,
+    movieGenre: MovieGenre,
+    queryRunner?: QueryRunner,
+  ): Promise<boolean> {
+    const movieGenreUpdated = await this.getRepository(queryRunner).update(id, {
       ...movieGenre,
     });
 
     return movieGenreUpdated.affected > 0;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.movieGenreRepository.delete(id);
+  async delete(id: string, queryRunner?: QueryRunner): Promise<void> {
+    await this.getRepository(queryRunner).delete(id);
   }
 
-  async findByName(name: string): Promise<MovieGenre> {
+  async findByName(
+    name: string,
+    queryRunner?: QueryRunner,
+  ): Promise<MovieGenre> {
     if (!name) return null;
 
-    const movieGenre = await this.movieGenreRepository.findOne({
+    const movieGenre = await this.getRepository(queryRunner).findOne({
       where: { name },
     });
 

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IMovieToGenreRepository } from './repository/movie-to-genre.repository.interface';
 import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 import { MovieToGenre } from './entities/movie-to-genre.entity';
+import { QueryRunner } from 'typeorm';
 
 @Injectable()
 export class MovieToGenreService {
@@ -10,16 +11,26 @@ export class MovieToGenreService {
     private readonly movieToGenreRepository: IMovieToGenreRepository,
   ) {}
 
-  public async removeAllByMovieId(movieId: string): Promise<void> {
+  public async removeAllByMovieId(
+    movieId: string,
+    queryRunner?: QueryRunner,
+  ): Promise<void> {
     if (!movieId) return;
 
-    const genres = await this.movieToGenreRepository.findAllBy({ movieId });
+    const genres = await this.movieToGenreRepository.findAllBy(
+      { movieId },
+      queryRunner,
+    );
 
     if (!genres?.length) return;
 
     await Promise.all(
       genres?.map((genre) =>
-        this.movieToGenreRepository.delete(movieId, genre.getGenreId()),
+        this.movieToGenreRepository.delete(
+          movieId,
+          genre.getGenreId(),
+          queryRunner,
+        ),
       ),
     );
   }
@@ -27,14 +38,15 @@ export class MovieToGenreService {
   public async associateMovieToGenres(
     movieId: string,
     genres: MovieGenre[],
+    queryRunner?: QueryRunner,
   ): Promise<MovieToGenre[]> {
     if (!genres?.length) return [];
 
-    await this.removeAllByMovieId(movieId);
+    await this.removeAllByMovieId(movieId, queryRunner);
 
     return await Promise.all(
       genres?.map((genre) =>
-        this.movieToGenreRepository.create(movieId, genre.getId()),
+        this.movieToGenreRepository.create(movieId, genre.getId(), queryRunner),
       ),
     );
   }

@@ -27,15 +27,30 @@ const entities = [
     UserModule,
     MovieToGenreModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: process.env.DB_DIALECT as any,
-      host: process.env.BD_HOST,
-      port: Number(process.env.BD_PORT),
-      username: process.env.BD_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      entities,
-      // synchronize: true,
+    // TypeOrmModule.forRoot({
+    //   type: process.env.DB_DIALECT as any,
+    //   host: process.env.BD_HOST,
+    //   port: Number(process.env.BD_PORT),
+    //   username: process.env.BD_USER,
+    //   password: process.env.DB_PASS,
+    //   database: process.env.DB_NAME,
+    //   entities,
+    // }),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: process.env.DB_DIALECT as any,
+        host: process.env.BD_HOST,
+        port: Number(process.env.BD_PORT),
+        username: process.env.BD_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+        entities,
+      }),
+
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+        return dataSource;
+      },
     }),
   ],
 })

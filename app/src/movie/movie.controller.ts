@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Res,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -17,19 +18,34 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { ExceptionsControllers } from '../utils/exceptions/exceptions-controllers';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { DataSource } from 'typeorm';
 
 @Controller('movie')
 export class MovieController {
-  constructor(private readonly movieService: MovieService) {}
+  constructor(
+    private readonly movieService: MovieService,
+    private readonly dataSource: DataSource,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createMovieDto: CreateMovieDto, @Res() res: Response) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.startTransaction();
     try {
-      const result = await this.movieService.create(createMovieDto);
+      const result = await this.movieService.create(
+        createMovieDto,
+        queryRunner,
+      );
+      await queryRunner.commitTransaction();
       return res.json(result);
     } catch (error) {
+      await queryRunner
+        .rollbackTransaction()
+        .then(() => Logger.error('Transaction rolled back'))
+        .catch((err) => Logger.error(err));
       return ExceptionsControllers.getException(error, res);
     }
   }

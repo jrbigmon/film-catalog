@@ -8,6 +8,7 @@ import { Movie } from './entities/movie.entity';
 import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface';
 import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 import { IMovieToGenreService } from '../movie-to-genre/movie-to-genre.service.interface';
+import { QueryRunner } from 'typeorm';
 
 @Injectable()
 export class MovieService {
@@ -20,10 +21,13 @@ export class MovieService {
     private readonly movieToGenreService: IMovieToGenreService,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto) {
+  async create(createMovieDto: CreateMovieDto, queryRunner?: QueryRunner) {
     const { genres, ...rest } = createMovieDto;
 
-    const genresCreated = await this.movieGenreService.getOrCreate(genres);
+    const genresCreated = await this.movieGenreService.getOrCreate(
+      genres,
+      queryRunner,
+    );
 
     if (!genresCreated?.length) {
       throw new ExceptionsServices(
@@ -38,12 +42,13 @@ export class MovieService {
       genres: genresCreated,
     });
 
-    const movieCreated = await this.repository.create(newMovie);
+    const movieCreated = await this.repository.create(newMovie, queryRunner);
 
     if (movieCreated) {
-      this.movieToGenreService.associateMovieToGenres(
+      await this.movieToGenreService.associateMovieToGenres(
         movieCreated.getId(),
         newMovie.getGenres(),
+        queryRunner,
       );
     }
 
@@ -63,23 +68,20 @@ export class MovieService {
 
     const { genres, ...rest } = updateMovieDto;
 
-    let genresInDB: MovieGenre[] = [];
+    let genresCreated: MovieGenre[] = [];
 
     if (genres) {
-      genresInDB = await this.movieGenreService.findAll({
-        filters: { name: genres },
-      });
+      genresCreated = await this.movieGenreService.getOrCreate(genres);
 
-      if (!genresInDB) {
-        throw new ExceptionsServices(
-          `Movie Genres not found`,
-          HttpStatus.BAD_REQUEST,
-          'genres',
+      if (genresCreated) {
+        await this.movieToGenreService.associateMovieToGenres(
+          id,
+          genresCreated,
         );
       }
     }
 
-    movieInDb.update({ genres: genresInDB, ...rest });
+    movieInDb.update({ genres: genresCreated, ...rest });
 
     const result = await this.repository.update(id, movieInDb);
 
