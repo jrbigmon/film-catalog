@@ -11,6 +11,7 @@ import {
   Res,
   UseGuards,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -55,7 +56,10 @@ export class MovieController {
   @Get()
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
-  async findAll(@Res() res: Response) {
+  async findAll(
+    @Res() res: Response,
+    @Query() query: { [key: string]: string },
+  ) {
     try {
       const result = await this.movieService.findAll();
       return res.json(result);
