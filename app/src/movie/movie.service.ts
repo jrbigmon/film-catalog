@@ -55,8 +55,12 @@ export class MovieService {
     return movieCreated;
   }
 
-  async update(id: string, updateMovieDto: UpdateMovieDto) {
-    const movieInDb = await this.repository.findById(id);
+  async update(
+    id: string,
+    updateMovieDto: UpdateMovieDto,
+    queryRunner?: QueryRunner,
+  ) {
+    const movieInDb = await this.repository.findById(id, queryRunner);
 
     if (!movieInDb) {
       throw new ExceptionsServices(
@@ -71,25 +75,29 @@ export class MovieService {
     let genresCreated: MovieGenre[] = [];
 
     if (genres) {
-      genresCreated = await this.movieGenreService.getOrCreate(genres);
+      genresCreated = await this.movieGenreService.getOrCreate(
+        genres,
+        queryRunner,
+      );
 
       if (genresCreated) {
         await this.movieToGenreService.associateMovieToGenres(
           id,
           genresCreated,
+          queryRunner,
         );
       }
     }
 
     movieInDb.update({ genres: genresCreated, ...rest });
 
-    const result = await this.repository.update(id, movieInDb);
+    const result = await this.repository.update(id, movieInDb, queryRunner);
 
     return result;
   }
 
-  async remove(id: string) {
-    const movieInDB = await this.repository.findById(id);
+  async remove(id: string, queryRunner?: QueryRunner) {
+    const movieInDB = await this.repository.findById(id, queryRunner);
 
     if (!movieInDB) {
       throw new ExceptionsServices(
@@ -101,15 +109,15 @@ export class MovieService {
 
     movieInDB.delete();
 
-    return await this.repository.delete(id);
+    return await this.repository.delete(id, queryRunner);
   }
 
-  async findAll(filters?: IFindAllFilters) {
-    return await this.repository.findAll(filters);
+  async findAll(filters?: IFindAllFilters, queryRunner?: QueryRunner) {
+    return await this.repository.findAll(filters, queryRunner);
   }
 
-  async findOne(id: string) {
-    const movie = await this.repository.findById(id);
+  async findOne(id: string, queryRunner?: QueryRunner) {
+    const movie = await this.repository.findById(id, queryRunner);
 
     if (!movie) {
       throw new ExceptionsServices(

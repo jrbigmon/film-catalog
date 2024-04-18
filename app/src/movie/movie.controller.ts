@@ -39,12 +39,14 @@ export class MovieController {
         createMovieDto,
         queryRunner,
       );
+
       await queryRunner.commitTransaction();
+
       return res.json(result);
     } catch (error) {
       await queryRunner
         .rollbackTransaction()
-        .then(() => Logger.error('Transaction rolled back'))
+        .then(() => Logger.log('Transaction rolled back successfully'))
         .catch((err) => Logger.error(err));
       return ExceptionsControllers.getException(error, res);
     }
@@ -82,10 +84,24 @@ export class MovieController {
     @Body() updateMovieDto: UpdateMovieDto,
     @Res() res: Response,
   ) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.startTransaction();
     try {
-      const result = await this.movieService.update(id, updateMovieDto);
+      const result = await this.movieService.update(
+        id,
+        updateMovieDto,
+        queryRunner,
+      );
+
+      await queryRunner.commitTransaction();
+
       return res.json(result);
     } catch (error) {
+      await queryRunner
+        .rollbackTransaction()
+        .then(() => Logger.log('Transaction rolled back successfully'))
+        .catch((err) => Logger.error(err));
       return ExceptionsControllers.getException(error, res);
     }
   }
