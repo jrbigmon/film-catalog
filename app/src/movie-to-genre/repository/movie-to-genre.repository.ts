@@ -2,26 +2,27 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MovieToGenreRepositoryTypeOrm } from './movie-to-genre.repository.type.orm';
 import { Injectable } from '@nestjs/common';
-import { MovieGenre } from 'src/movie-genre/entities/movie-genre.entity';
+import { IMovieToGenreRepository } from './movie-to-genre.repository.interface';
+import { MovieToGenre } from '../entities/movie-to-genre.entity';
 
 @Injectable()
-export class MovieToGenreRepository {
+export class MovieToGenreRepository implements IMovieToGenreRepository {
   constructor(
     @InjectRepository(MovieToGenreRepositoryTypeOrm)
     private readonly movieToGenreRepository: Repository<MovieToGenreRepositoryTypeOrm>,
   ) {}
 
-  public async create(
-    movieId: string,
-    genreId: string,
-  ): Promise<MovieToGenreRepositoryTypeOrm> {
+  public async create(movieId: string, genreId: string): Promise<MovieToGenre> {
     const movieToGenreInDB = await this.movieToGenreRepository.findOneBy({
       movieId,
       genreId,
     });
 
     if (movieToGenreInDB) {
-      return movieToGenreInDB;
+      return new MovieToGenre(
+        movieToGenreInDB.movieId,
+        movieToGenreInDB.genreId,
+      );
     }
 
     const movieToGenreCreated = await this.movieToGenreRepository.save({
@@ -29,7 +30,10 @@ export class MovieToGenreRepository {
       genreId,
     });
 
-    return movieToGenreCreated;
+    return new MovieToGenre(
+      movieToGenreCreated.movieId,
+      movieToGenreCreated.genreId,
+    );
   }
 
   public async delete(movieId: string, genreId: string): Promise<void> {
@@ -43,30 +47,19 @@ export class MovieToGenreRepository {
     }
   }
 
-  public async removeAllByMovieId(movieId: string): Promise<void> {
-    if (!movieId) return;
+  public async findAllBy(filter: {
+    movieId?: string;
+    genreId?: string;
+  }): Promise<MovieToGenre[]> {
+    if (!filter) return;
 
-    const genres = await this.movieToGenreRepository.find({
-      where: { movieId },
+    const moviesToGenres = await this.movieToGenreRepository.find({
+      where: { ...filter },
     });
 
-    if (!genres?.length) return;
-
-    await Promise.all(
-      genres?.map((genre) => this.delete(movieId, genre.genreId)),
-    );
-  }
-
-  public async associateMovieToGenres(
-    movieId: string,
-    genres: MovieGenre[],
-  ): Promise<MovieToGenreRepositoryTypeOrm[]> {
-    if (!genres?.length) return [];
-
-    await this.removeAllByMovieId(movieId);
-
-    return await Promise.all(
-      genres?.map((genre) => this.create(movieId, genre.getId())),
+    return moviesToGenres?.map(
+      (movieToGenre) =>
+        new MovieToGenre(movieToGenre.movieId, movieToGenre.genreId),
     );
   }
 }

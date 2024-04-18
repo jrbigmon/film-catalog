@@ -1,13 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MovieToGenreRepository } from './repository/movie-to-genre.repository';
 import entities from '../database/entities/type.orm.entities';
+import { MovieToGenreService } from './movie-to-genre.service';
+import { MovieToGenreRepository } from './repository/movie-to-genre.repository';
 
 const models = TypeOrmModule.forFeature(entities);
 
 @Module({
   imports: [models],
-  providers: [MovieToGenreRepository],
-  exports: [MovieToGenreRepository],
+  providers: [
+    MovieToGenreService,
+    MovieToGenreRepository,
+    {
+      provide: 'MovieToGenreRepository',
+      useExisting: MovieToGenreRepository,
+    },
+  ],
+  exports: [MovieToGenreService],
 })
 export class MovieToGenreModule {}
