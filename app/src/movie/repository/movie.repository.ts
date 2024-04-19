@@ -4,11 +4,12 @@ import { IFindAllFilters } from '../../utils/interfaces/find-all-filters.interfa
 import { IFindByFilter } from '../../utils/interfaces/find-by-filters.interface';
 import { Movie } from '../entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner, Repository } from 'typeorm';
+import { In, QueryRunner, Repository } from 'typeorm';
 import { MovieRepositoryTypeOrm } from './movie.repository.type.orm';
 import { MovieGenreRepository } from 'src/movie-genre/repository/movie-genre.repository';
 import { opLikeTypeOrm } from '../../utils/functions/op-like-type-orm';
 import { orderTypeOrm } from '../../utils/functions/order-type-orm';
+import { limitByTypeOrm } from '../../utils/functions/limit-type-orm';
 
 @Injectable()
 export class MovieRepository implements IMovieRepository {
@@ -62,7 +63,12 @@ export class MovieRepository implements IMovieRepository {
   }
 
   async findById(id: string, queryRunner?: QueryRunner): Promise<Movie> {
-    const movie = await this.getRepository(queryRunner).findOneBy({ id });
+    const movie = await this.getRepository(queryRunner).findOne({
+      where: { id },
+      relations: {
+        genres: true,
+      },
+    });
 
     return MovieRepository.movieMount(movie);
   }
@@ -79,14 +85,22 @@ export class MovieRepository implements IMovieRepository {
     filters?: IFindAllFilters,
     queryRunner?: QueryRunner,
   ): Promise<Movie[]> {
+    const genresKey = filters?.filters?.['genres'];
+
+    const genresFilters = genresKey
+      ? { name: In(Array.isArray(genresKey) ? genresKey : [genresKey]) }
+      : {};
+
     const movies = await this.getRepository(queryRunner).find({
       where: {
-        ...opLikeTypeOrm(filters.filters),
+        ...opLikeTypeOrm(filters?.filters),
+        genres: genresFilters,
       },
+      order: orderTypeOrm(filters?.orderBy),
+      take: limitByTypeOrm(filters?.limitBy),
       relations: {
         genres: true,
       },
-      order: orderTypeOrm(filters.orderBy),
     });
 
     if (!movies?.length) return [];
