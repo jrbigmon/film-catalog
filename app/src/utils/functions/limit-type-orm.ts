@@ -1,13 +1,25 @@
-export function limitByTypeOrm(limitBy?: string | number) {
-  const maxSize = 30;
+export function limitByTypeOrm(
+  limitBy?: string | number,
+  page?: string | number,
+) {
+  const defaultLimitAndPage = { take: 30, skip: 0 };
 
-  if (!limitBy) return maxSize;
+  if (!limitBy && !page) return defaultLimitAndPage;
 
-  const value = Number(limitBy);
+  let take = Number(limitBy);
+  let skip = Number(page);
 
-  if (Number.isNaN(value)) return maxSize;
+  take = Number.isNaN(take) ? defaultLimitAndPage.take : take;
+  skip = Number.isNaN(skip) ? defaultLimitAndPage.skip : skip;
 
-  if (value > maxSize) return maxSize;
+  if (take > defaultLimitAndPage.take)
+    return {
+      take: defaultLimitAndPage.take,
+      skip: defaultLimitAndPage.take * skip - defaultLimitAndPage.take,
+    };
 
-  return value;
+  return {
+    take,
+    skip: take * skip - take,
+  };
 }

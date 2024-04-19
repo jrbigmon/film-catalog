@@ -84,28 +84,32 @@ export class MovieRepository implements IMovieRepository {
   async findAll(
     filters?: IFindAllFilters,
     queryRunner?: QueryRunner,
-  ): Promise<Movie[]> {
+  ): Promise<{ count: number; movies: Movie[] }> {
     const genresKey = filters?.filters?.['genres'];
 
     const genresFilters = genresKey
       ? { name: In(Array.isArray(genresKey) ? genresKey : [genresKey]) }
       : {};
 
-    const movies = await this.getRepository(queryRunner).find({
+    const { skip, take } = limitByTypeOrm(filters?.limitBy, filters?.page);
+
+    const [movies, count] = await this.getRepository(queryRunner).findAndCount({
       where: {
         ...opLikeTypeOrm(filters?.filters),
         genres: genresFilters,
       },
       order: orderTypeOrm(filters?.orderBy),
-      take: limitByTypeOrm(filters?.limitBy),
+      skip,
+      take,
       relations: {
         genres: true,
       },
     });
 
-    if (!movies?.length) return [];
-
-    return movies?.map((movie) => MovieRepository.movieMount(movie));
+    return {
+      count,
+      movies: movies?.map((movie) => MovieRepository.movieMount(movie)),
+    };
   }
 
   async create(movie: Movie, queryRunner?: QueryRunner): Promise<Movie> {

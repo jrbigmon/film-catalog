@@ -30,7 +30,7 @@ export function orderTypeOrm(order: string) {
       [column]: sort.toUpperCase(),
     };
   } catch (error) {
-    console.log(error);
+    console.log('Error on parsing order: ', error);
     return {
       id: Sort.ASC,
     };

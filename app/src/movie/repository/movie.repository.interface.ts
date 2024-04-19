@@ -12,7 +12,7 @@ export interface IMovieRepository {
   findAll(
     filters?: IFindAllFilters,
     queryRunner?: QueryRunner,
-  ): Promise<Movie[]>;
+  ): Promise<{ count: number; movies: Movie[] }>;
   create(movie: Movie, queryRunner?: QueryRunner): Promise<Movie>;
   update(id: string, movie: Movie, queryRunner?: QueryRunner): Promise<boolean>;
   delete(id: string, queryRunner?: QueryRunner): Promise<void>;
