@@ -20,6 +20,8 @@ import { ExceptionsControllers } from '../utils/exceptions/exceptions-controller
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { DataSource } from 'typeorm';
+import { queryParser } from '../utils/functions/query-parser';
+import { OPTIONS_FILTERS } from './utils/constants/options-filters';
 
 @Controller('movie')
 export class MovieController {
@@ -61,7 +63,9 @@ export class MovieController {
     @Query() query: { [key: string]: string },
   ) {
     try {
-      const result = await this.movieService.findAll();
+      const result = await this.movieService.findAll(
+        queryParser(query, OPTIONS_FILTERS),
+      );
       return res.json(result);
     } catch (error) {
       return ExceptionsControllers.getException(error, res);

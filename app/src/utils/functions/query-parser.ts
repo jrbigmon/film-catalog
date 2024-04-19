@@ -8,7 +8,7 @@ export function queryParser(
 
   const queryParsed: IFindAllFilters = {
     limitBy: '30',
-    orderBy: 'DESC',
+    orderBy: JSON.stringify(['id', 'ASC']),
     page: '0',
     filters: {},
   };

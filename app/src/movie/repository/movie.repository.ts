@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryRunner, Repository } from 'typeorm';
 import { MovieRepositoryTypeOrm } from './movie.repository.type.orm';
 import { MovieGenreRepository } from 'src/movie-genre/repository/movie-genre.repository';
+import { opLikeTypeOrm } from '../../utils/functions/op-like-type-orm';
+import { orderTypeOrm } from '../../utils/functions/order-type-orm';
 
 @Injectable()
 export class MovieRepository implements IMovieRepository {
@@ -78,10 +80,13 @@ export class MovieRepository implements IMovieRepository {
     queryRunner?: QueryRunner,
   ): Promise<Movie[]> {
     const movies = await this.getRepository(queryRunner).find({
-      ...filters?.filters,
+      where: {
+        ...opLikeTypeOrm(filters.filters),
+      },
       relations: {
         genres: true,
       },
+      order: orderTypeOrm(filters.orderBy),
     });
 
     if (!movies?.length) return [];
