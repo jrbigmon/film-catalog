@@ -1,8 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 
 import { CacheManagerService } from './cache-manager.service';
 import { cacheManagerConfig } from './cache-manager.config';
+import { CacheInterceptorCustom } from './cache-manager.interceptor';
+
+const services: Provider[] = [
+  CacheInterceptorCustom,
+  CacheManagerService,
+  {
+    provide: 'CacheManagerService',
+    useExisting: CacheManagerService,
+  },
+];
 
 @Module({
   imports: [
@@ -11,10 +21,7 @@ import { cacheManagerConfig } from './cache-manager.config';
       ...cacheManagerConfig,
     }),
   ],
-  providers: [
-    CacheManagerService,
-    { provide: 'CacheManagerService', useExisting: CacheManagerService },
-  ],
-  exports: [CacheManagerService],
+  providers: services,
+  exports: services,
 })
 export class CacheManagerModule {}

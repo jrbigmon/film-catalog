@@ -9,7 +9,6 @@ import { MovieToGenreModule } from 'src/movie-to-genre/movie-to-genre.module';
 import entities from '../database/entities/type.orm.entities';
 import { MovieToGenreService } from '../movie-to-genre/movie-to-genre.service';
 import { CacheManagerModule } from '../cache-manager/cache-manager.module';
-import { CacheManagerService } from '../cache-manager/cache-manager.service';
 
 const models = TypeOrmModule.forFeature(entities);
 
@@ -30,10 +29,6 @@ const models = TypeOrmModule.forFeature(entities);
     {
       provide: 'MovieToGenreService',
       useExisting: MovieToGenreService,
-    },
-    {
-      provide: 'CacheManagerService',
-      useExisting: CacheManagerService,
     },
   ],
 })

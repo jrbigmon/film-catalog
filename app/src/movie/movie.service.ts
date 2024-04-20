@@ -9,7 +9,6 @@ import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface'
 import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 import { IMovieToGenreService } from '../movie-to-genre/movie-to-genre.service.interface';
 import { QueryRunner } from 'typeorm';
-import { ICacheManagerService } from '../cache-manager/cache-manager.interface';
 
 @Injectable()
 export class MovieService {
@@ -20,8 +19,6 @@ export class MovieService {
     private readonly movieGenreService: IMovieGenreService,
     @Inject('MovieToGenreService')
     private readonly movieToGenreService: IMovieToGenreService,
-    @Inject('CacheManagerService')
-    private readonly cacheManagerService: ICacheManagerService,
   ) {}
 
   async create(createMovieDto: CreateMovieDto, queryRunner?: QueryRunner) {
@@ -54,8 +51,6 @@ export class MovieService {
         queryRunner,
       );
     }
-
-    await this.cacheManagerService.clear();
 
     return movieCreated;
   }
@@ -98,8 +93,6 @@ export class MovieService {
 
     const result = await this.repository.update(id, movieInDb, queryRunner);
 
-    await this.cacheManagerService.clear();
-
     return result;
   }
 
@@ -116,25 +109,11 @@ export class MovieService {
 
     movieInDB.delete();
 
-    await this.cacheManagerService.clear();
-
     return await this.repository.delete(id, queryRunner);
   }
 
   async findAll(filters?: IFindAllFilters, queryRunner?: QueryRunner) {
-    const filtersParsedToKey = filters ? JSON.stringify(filters) : '';
-
-    const resultInCache = await this.cacheManagerService.get<Movie[]>(
-      filtersParsedToKey,
-    );
-
-    if (resultInCache) {
-      return resultInCache;
-    }
-
     const result = await this.repository.findAll(filters, queryRunner);
-
-    await this.cacheManagerService.set(filtersParsedToKey, result);
 
     return result;
   }
@@ -149,14 +128,6 @@ export class MovieService {
         'id',
       );
     }
-
-    const resultInCache = await this.cacheManagerService.get<Movie>(id);
-
-    if (resultInCache) {
-      return resultInCache;
-    }
-
-    await this.cacheManagerService.set(id, movie);
 
     return movie;
   }
