@@ -55,6 +55,8 @@ export class MovieService {
       );
     }
 
+    await this.cacheManagerService.clear();
+
     return movieCreated;
   }
 
@@ -96,6 +98,8 @@ export class MovieService {
 
     const result = await this.repository.update(id, movieInDb, queryRunner);
 
+    await this.cacheManagerService.clear();
+
     return result;
   }
 
@@ -112,11 +116,27 @@ export class MovieService {
 
     movieInDB.delete();
 
+    await this.cacheManagerService.clear();
+
     return await this.repository.delete(id, queryRunner);
   }
 
   async findAll(filters?: IFindAllFilters, queryRunner?: QueryRunner) {
-    return await this.repository.findAll(filters, queryRunner);
+    const filtersParsedToKey = filters ? JSON.stringify(filters) : '';
+
+    const resultInCache = await this.cacheManagerService.get<Movie[]>(
+      filtersParsedToKey,
+    );
+
+    if (resultInCache) {
+      return resultInCache;
+    }
+
+    const result = await this.repository.findAll(filters, queryRunner);
+
+    await this.cacheManagerService.set(filtersParsedToKey, result);
+
+    return result;
   }
 
   async findOne(id: string, queryRunner?: QueryRunner) {
@@ -129,6 +149,14 @@ export class MovieService {
         'id',
       );
     }
+
+    const resultInCache = await this.cacheManagerService.get<Movie>(id);
+
+    if (resultInCache) {
+      return resultInCache;
+    }
+
+    await this.cacheManagerService.set(id, movie);
 
     return movie;
   }
