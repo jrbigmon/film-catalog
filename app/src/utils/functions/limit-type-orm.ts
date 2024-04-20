@@ -15,11 +15,11 @@ export function limitByTypeOrm(
   if (take > defaultLimitAndPage.take)
     return {
       take: defaultLimitAndPage.take,
-      skip: defaultLimitAndPage.take * skip - defaultLimitAndPage.take,
+      skip: defaultLimitAndPage.take * (skip || 1) - defaultLimitAndPage.take,
     };
 
   return {
     take,
-    skip: take * skip - take,
+    skip: take * (skip || 1) - take,
   };
 }
