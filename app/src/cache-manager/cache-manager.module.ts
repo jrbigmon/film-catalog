@@ -3,16 +3,18 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 import { CacheManagerService } from './cache-manager.service';
 import { cacheManagerConfig } from './cache-manager.config';
-import { RedisClientOptions } from 'redis';
 
 @Module({
   imports: [
-    CacheModule.register<RedisClientOptions>({
+    CacheModule.register({
       isGlobal: true,
       ...cacheManagerConfig,
     }),
   ],
-  providers: [CacheManagerService],
+  providers: [
+    CacheManagerService,
+    { provide: 'CacheManagerService', useExisting: CacheManagerService },
+  ],
   exports: [CacheManagerService],
 })
 export class CacheManagerModule {}

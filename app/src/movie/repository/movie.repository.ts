@@ -27,6 +27,8 @@ export class MovieRepository implements IMovieRepository {
   }
 
   public static movieMount(movie: MovieRepositoryTypeOrm): Movie {
+    if (!movie) return null;
+
     const {
       id,
       title,
