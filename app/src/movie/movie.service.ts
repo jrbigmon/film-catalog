@@ -9,6 +9,7 @@ import { IFindAllFilters } from '../utils/interfaces/find-all-filters.interface'
 import { MovieGenre } from '../movie-genre/entities/movie-genre.entity';
 import { IMovieToGenreService } from '../movie-to-genre/movie-to-genre.service.interface';
 import { QueryRunner } from 'typeorm';
+import { ICacheManagerService } from '../cache-manager/cache-manager.interface';
 
 @Injectable()
 export class MovieService {
@@ -19,6 +20,8 @@ export class MovieService {
     private readonly movieGenreService: IMovieGenreService,
     @Inject('MovieToGenreService')
     private readonly movieToGenreService: IMovieToGenreService,
+    @Inject('CacheManagerService')
+    private readonly cacheManagerService: ICacheManagerService,
   ) {}
 
   async create(createMovieDto: CreateMovieDto, queryRunner?: QueryRunner) {
