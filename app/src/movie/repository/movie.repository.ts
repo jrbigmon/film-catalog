@@ -125,8 +125,9 @@ export class MovieRepository implements IMovieRepository {
     movie: Movie,
     queryRunner?: QueryRunner,
   ): Promise<boolean> {
+    const { genres, ...movieToUpdate } = movie.toJSON();
     const movieUpdated = await this.getRepository(queryRunner).update(id, {
-      ...movie,
+      ...movieToUpdate,
     });
 
     return movieUpdated?.affected > 0;
