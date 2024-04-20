@@ -23,6 +23,7 @@
     "migration:undo": "yarn typeorm migration:revert -d src/database/ormconfig.js"
   },
   "dependencies": {
+    "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^9.0.0",
@@ -33,11 +34,14 @@
     "@nestjs/typeorm": "^10.0.2",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
+    "cache-manager": "^5.5.1",
+    "cache-manager-redis-store": "^3.0.1",
     "dotenv": "^16.4.5",
     "mysql2": "^3.9.4",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.5",
+    "redis": "^4.6.13",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.20"
