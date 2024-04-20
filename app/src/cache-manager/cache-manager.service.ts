@@ -16,4 +16,8 @@ export class CacheManagerService implements ICacheManagerService {
   public async get<T>(key: string): Promise<T | undefined> {
     return await this.cacheService.get(key);
   }
+
+  public async clear(): Promise<void> {
+    return await this.cacheService.reset();
+  }
 }

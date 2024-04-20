@@ -10,4 +10,8 @@ export class CacheManagerInMemory implements ICacheManagerService {
   async get<T>(key: string): Promise<T | undefined> {
     return this.caches.get(key);
   }
+
+  async clear(): Promise<void> {
+    return this.caches.clear();
+  }
 }

@@ -1,4 +1,4 @@
-import * as redisStore from 'cache-manager-redis-store';
+import { redisStore } from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 
 export const cacheManagerConfig = {
