@@ -8,7 +8,6 @@ describe('Movie', () => {
         title: 'Test 1',
         genres: [new MovieGenre('Action', '123')],
         director: 'Me',
-        cast: ['Me', 'Me 2', 'Me 3'],
         releaseYear: 2032,
         durationMinutes: 300,
         rating: 10,
