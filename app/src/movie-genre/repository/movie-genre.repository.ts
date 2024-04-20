@@ -74,7 +74,7 @@ export class MovieGenreRepository implements IMovieGenreRepository {
   }
 
   async delete(id: string, queryRunner?: QueryRunner): Promise<void> {
-    await this.getRepository(queryRunner).delete(id);
+    await this.getRepository(queryRunner).softDelete(id);
   }
 
   async findByName(

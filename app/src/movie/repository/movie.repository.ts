@@ -133,7 +133,7 @@ export class MovieRepository implements IMovieRepository {
     return movieUpdated?.affected > 0;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.movieRepository.delete(id);
+  async delete(id: string, queryRunner?: QueryRunner): Promise<void> {
+    await this.getRepository(queryRunner).softDelete(id);
   }
 }
