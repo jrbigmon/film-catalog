@@ -11,6 +11,7 @@ import { MovieToGenreModule } from './movie-to-genre/movie-to-genre.module';
 import { MovieToGenreRepositoryTypeOrm } from './movie-to-genre/repository/movie-to-genre.repository.type.orm';
 import { MovieRepositoryTypeOrm } from './movie/repository/movie.repository.type.orm';
 import { DataSource } from 'typeorm';
+import { CacheManagerModule } from './cache-manager/cache-manager.module';
 
 const entities = [
   UserRepositoryTypeOrm,
@@ -21,21 +22,13 @@ const entities = [
 
 @Module({
   imports: [
+    CacheManagerModule,
     AuthModule,
     MovieGenreModule,
     MovieModule,
     UserModule,
     MovieToGenreModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    // TypeOrmModule.forRoot({
-    //   type: process.env.DB_DIALECT as any,
-    //   host: process.env.BD_HOST,
-    //   port: Number(process.env.BD_PORT),
-    //   username: process.env.BD_USER,
-    //   password: process.env.DB_PASS,
-    //   database: process.env.DB_NAME,
-    //   entities,
-    // }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: process.env.DB_DIALECT as any,
